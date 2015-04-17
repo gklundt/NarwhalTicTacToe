@@ -1,4 +1,5 @@
 //refactor joinAgainPanel to be same panel for start screen
+//fjfjfjfjfslkdfsjkldfsjkl
 //and consider issue of components being removed when added elsewhere
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
