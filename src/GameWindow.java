@@ -1,6 +1,3 @@
-//refactor joinAgainPanel to be same panel for start screen
-//fjfjfjfjfslkdfsjkldfsjkl
-//and consider issue of components being removed when added elsewhere
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Container;
@@ -34,6 +31,7 @@ public class GameWindow extends JFrame implements GameObserver {
 	private final JLabel whosTurnLabel;
 	private final JLabel gameModeLabel;
 	private final ArrayList buttonList; 
+	private final JPanel statsPanel;
 
     public GameWindow(AbstractGameController gc) {
 		//observe any changes in myGameController
@@ -51,7 +49,7 @@ public class GameWindow extends JFrame implements GameObserver {
 		cards = new JPanel(new CardLayout());
 		startPanel = new JPanel();
 		JPanel buttonPanel = new JPanel(new GridLayout(3,3));
-		JPanel statsPanel = new JPanel(new BorderLayout());
+		statsPanel = new JPanel(new BorderLayout());
 		JPanel gameModePanel = new JPanel();
 		joinAgainPanel = new JPanel(new GridLayout(3, 1));
 
@@ -63,8 +61,6 @@ public class GameWindow extends JFrame implements GameObserver {
 			buttonPanel.add(b);
 			buttonList.add(b);
 		}
-
-
 
 		gameModeLabel = new JLabel("Movement Mode");
 		timeLeftLabel = new JLabel("timeLeft");
@@ -84,33 +80,20 @@ public class GameWindow extends JFrame implements GameObserver {
 		codePanel.add(codeText);
 
 		//add components to containers
-		startPanel.add(startGameBtn);
-		startPanel.add(codePanel);
-		startPageCard.add(startPanel);
+		startPageCard.add(joinAgainPanel);
 		playGameCard.add(buttonPanel, "Center");
 		statsLabelContainer.add(timeLeftLabel);
 		statsLabelContainer.add(whosTurnLabel);
 		statsPanel.add(statsLabelContainer, "North");
-		statsPanel.add(joinAgainPanel, "South");
-		joinAgainPanel.add(startGameBtn2);
+		joinAgainPanel.add(startGameBtn/*2*/);
 		joinAgainPanel.add(new JLabel("Game ID"));
 		joinAgainPanel.add(codeText2);
-		//joinAgainPanel.setVisible(false);
 		playGameCard.add(statsPanel, "East");
 		gameModePanel.add(gameModeLabel);
 		playGameCard.add(gameModePanel, "South");
 		cards.add(startPageCard, STARTGAMECARD);
 		cards.add(playGameCard, PLAYGAMECARD);
 		rootWindow.add(cards, BorderLayout.CENTER);
-
-		//dumb test strings
-		//statsPanel.add( new JTextField(new String("statsPanel")), "North");
-		//buttonPanel.add( new JTextField(new String("buttonPanel")));
-		//gameModePanel.add( new JTextField(new String("gameModePanel")));
-		
-		
-		//JPanel hidden for Join Game/Start Game in gameplay card
-		//--needs button and textbox
 
 
 		//make start game button default button for enter
@@ -163,33 +146,30 @@ public class GameWindow extends JFrame implements GameObserver {
 		}
 	}
 
-class ButtonListener implements ActionListener {
+	class ButtonListener implements ActionListener {
 
-    @Override
-    public void actionPerformed(ActionEvent ae) {
-       JButton buttonPressed = (JButton) (ae.getSource());
-		if(buttonPressed.equals(startGameBtn)){
-			if(codeText.getText().equals("")){
-				//myGameController.start();
-			} else {
-				//myGameController.start(codeText gameID)
-			}
+		@Override
+		public void actionPerformed(ActionEvent ae) {
+		   JButton buttonPressed = (JButton) (ae.getSource());
+			if(buttonPressed.equals(startGameBtn)){
+				if(codeText.getText().equals("")){
+					//myGameController.start();
+				} else {
+					//myGameController.start(codeText gameID)
+				}
 
+				statsPanel.add(joinAgainPanel, "South");
 
-			//joinAgainPanel.setVisible(false);
-			CardLayout c1 = (CardLayout)(cards.getLayout());
-			c1.show(cards, PLAYGAMECARD);
-		} else if (buttonPressed.equals(startGameBtn2)){
-			if(codeText2.getText().equals("")){
-				//myGameController.start();
-			} else {
-				//myGameController.start(String gameID)
-			}
+				//make start game button default button for enter
+				JRootPane rootPane = SwingUtilities.getRootPane(startGameBtn);
+				rootPane.setDefaultButton(startGameBtn);
 
-			
+				//switch to next card
+				CardLayout c1 = (CardLayout)(cards.getLayout());
+				c1.show(cards, PLAYGAMECARD);
+			}     
 		}
-    }
 
-}
+	}
 	
 }
