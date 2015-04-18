@@ -23,8 +23,7 @@ public class GameWindow extends JFrame implements GameObserver {
 	private final static String STARTGAMECARD = "Card for starting Game";
 	private final static String PLAYGAMECARD = "Card for playing Game";
 	private final JButton startGameBtn2;
-	private final JPanel startPanel;
-	private final JPanel joinAgainPanel;
+	private final JPanel startGamePanel;
 	private final JTextField codeText;
 	private final JTextField codeText2;
 	private final JLabel timeLeftLabel;
@@ -47,11 +46,10 @@ public class GameWindow extends JFrame implements GameObserver {
 		//One card for gameplay
 		JPanel playGameCard = new JPanel(new BorderLayout());
 		cards = new JPanel(new CardLayout());
-		startPanel = new JPanel();
 		JPanel buttonPanel = new JPanel(new GridLayout(3,3));
 		statsPanel = new JPanel(new BorderLayout());
 		JPanel gameModePanel = new JPanel();
-		joinAgainPanel = new JPanel(new GridLayout(3, 1));
+		startGamePanel = new JPanel(new GridLayout(3, 1));
 
 		Font buttonFont = new Font("Courier New", Font.BOLD, 180);
 		
@@ -80,14 +78,14 @@ public class GameWindow extends JFrame implements GameObserver {
 		codePanel.add(codeText);
 
 		//add components to containers
-		startPageCard.add(joinAgainPanel);
+		startPageCard.add(startGamePanel);
 		playGameCard.add(buttonPanel, "Center");
 		statsLabelContainer.add(timeLeftLabel);
 		statsLabelContainer.add(whosTurnLabel);
 		statsPanel.add(statsLabelContainer, "North");
-		joinAgainPanel.add(startGameBtn/*2*/);
-		joinAgainPanel.add(new JLabel("Game ID"));
-		joinAgainPanel.add(codeText2);
+		startGamePanel.add(startGameBtn/*2*/);
+		startGamePanel.add(new JLabel("Game ID"));
+		startGamePanel.add(codeText2);
 		playGameCard.add(statsPanel, "East");
 		gameModePanel.add(gameModeLabel);
 		playGameCard.add(gameModePanel, "South");
@@ -158,7 +156,7 @@ public class GameWindow extends JFrame implements GameObserver {
 					//myGameController.start(codeText gameID)
 				}
 
-				statsPanel.add(joinAgainPanel, "South");
+				statsPanel.add(startGamePanel, "South");
 
 				//make start game button default button for enter
 				JRootPane rootPane = SwingUtilities.getRootPane(startGameBtn);
