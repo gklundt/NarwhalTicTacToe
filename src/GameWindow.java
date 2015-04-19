@@ -25,7 +25,7 @@ public class GameWindow extends JFrame implements GameObserver {
 	private final JButton startGameBtn2;
 	private final JPanel startGamePanel;
 	private final JTextField codeText;
-	private final JTextField codeText2;
+	//private final JTextField codeText2;
 	private final JLabel timeLeftLabel;
 	private final JLabel whosTurnLabel;
 	private final JLabel gameModeLabel;
@@ -71,11 +71,11 @@ public class GameWindow extends JFrame implements GameObserver {
 		startGameBtn.addActionListener(btnObserver);
 		startGameBtn2.addActionListener(btnObserver);
 
-		JPanel codePanel = new JPanel(new GridLayout(2, 1));
+		//JPanel codePanel = new JPanel(new GridLayout(2, 1));
 		codeText = new JTextField("");
-		codeText2 = new JTextField();
-		codePanel.add(new JLabel("Game ID"));
-		codePanel.add(codeText);
+		//codeText2 = new JTextField();
+		//codePanel.add(new JLabel("Game ID"));
+		//codePanel.add(codeText);
 
 		//add components to containers
 		startPageCard.add(startGamePanel);
@@ -85,7 +85,7 @@ public class GameWindow extends JFrame implements GameObserver {
 		statsPanel.add(statsLabelContainer, "North");
 		startGamePanel.add(startGameBtn/*2*/);
 		startGamePanel.add(new JLabel("Game ID"));
-		startGamePanel.add(codeText2);
+		startGamePanel.add(codeText);
 		playGameCard.add(statsPanel, "East");
 		gameModePanel.add(gameModeLabel);
 		playGameCard.add(gameModePanel, "South");
@@ -185,6 +185,7 @@ public class GameWindow extends JFrame implements GameObserver {
 					//myGameController.start(codeText gameID)
 				}
 
+				//move startGamePanel to second card
 				statsPanel.add(startGamePanel, "South");
 
 				//make start game button default button for enter
