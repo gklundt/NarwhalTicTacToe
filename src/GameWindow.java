@@ -142,6 +142,7 @@ public class GameWindow extends JFrame implements GameObserver {
 					}
 				}
 			}
+			//slide mode
 			for(int i = 8; i < data.gameSequence.length; i++){
 				for(int j = 0; j < 9; j++){
 					if(buttonList.get(j).getText().equals("")){
