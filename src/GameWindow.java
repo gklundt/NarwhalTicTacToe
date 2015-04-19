@@ -118,7 +118,7 @@ public class GameWindow extends JFrame implements GameObserver {
     }
 
 	private void updateBoard(GameData data) {
-		//slide mode for first 8 moves
+		//normal mode for first 8 moves
 		//if we are first player use evens 0, 2, 4 indices in history for X's (or narwhals)
 		//if we are second player use odds 1, 3, 5 indices in history for O's (or squids)
 			for(int i = 0; i < 8; i++){
@@ -196,7 +196,5 @@ public class GameWindow extends JFrame implements GameObserver {
 				c1.show(cards, PLAYGAMECARD);
 			}     
 		}
-
 	}
-	
 }
