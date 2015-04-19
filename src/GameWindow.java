@@ -24,8 +24,7 @@ public class GameWindow extends JFrame implements GameObserver {
 	private final static String PLAYGAMECARD = "Card for playing Game";
 	private final JButton startGameBtn2;
 	private final JPanel startGamePanel;
-	private final JTextField codeText;
-	//private final JTextField codeText2;
+	public final JTextField codeText;
 	private final JLabel timeLeftLabel;
 	private final JLabel whosTurnLabel;
 	private final JLabel gameModeLabel;
@@ -70,12 +69,7 @@ public class GameWindow extends JFrame implements GameObserver {
 		btnObserver = new ButtonListener();
 		startGameBtn.addActionListener(btnObserver);
 		startGameBtn2.addActionListener(btnObserver);
-
-		//JPanel codePanel = new JPanel(new GridLayout(2, 1));
 		codeText = new JTextField("");
-		//codeText2 = new JTextField();
-		//codePanel.add(new JLabel("Game ID"));
-		//codePanel.add(codeText);
 
 		//add components to containers
 		startPageCard.add(startGamePanel);
