@@ -29,7 +29,7 @@ public class GameWindow extends JFrame implements GameObserver {
 	private final JLabel timeLeftLabel;
 	private final JLabel whosTurnLabel;
 	private final JLabel gameModeLabel;
-	private final ArrayList buttonList; 
+	private final ArrayList<JButton> buttonList; 
 	private final JPanel statsPanel;
 
     public GameWindow(AbstractGameController gc) {
@@ -118,10 +118,30 @@ public class GameWindow extends JFrame implements GameObserver {
     }
 
 	private void updateBoard(GameData data) {
+		//slide mode for first 8 moves
 		//if we are first player use evens 0, 2, 4 indices in history for X's (or narwhals)
-
 		//if we are second player use odds 1, 3, 5 indices in history for O's (or squids)
-		
+			for(int i = 0; i < 8; i++){
+				for(int j=0; j < 9; j++){
+					if(data.gameSequence[i] == j){
+						if(data.player.equals(Player.PLAYER1)){
+							if((i % 2) == 0){
+								buttonList.get(j).setText("X");
+							}
+							else {
+								buttonList.get(j).setText("O");
+							}
+						}else{
+							if((i % 2) == 0){
+								buttonList.get(j).setText("O");
+							}
+							else {
+								buttonList.get(j).setText("X");
+							}
+						}
+					}
+				}
+			}
 	}
 
 
