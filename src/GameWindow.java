@@ -18,7 +18,7 @@ public class GameWindow extends JFrame implements GameObserver {
 
     private final AbstractGameController myGameController;
 	private final ButtonListener btnObserver;
-	private final JButton startGameBtn;
+	public final JButton startGameBtn;
 	private final JPanel cards;
 	private final static String STARTGAMECARD = "Card for starting Game";
 	private final static String PLAYGAMECARD = "Card for playing Game";
