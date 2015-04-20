@@ -32,6 +32,7 @@ public class RestProtocolAdapterBehavior implements ProtocolAdapterBehaviorInter
         data.result = Result.NONE;
         data.timeLeft = 30000;
         this.playerId = this.api_connect(data.gameId);
+        System.out.printf("PlayerId: %s \n", this.playerId);
 
     }
 
@@ -61,7 +62,23 @@ public class RestProtocolAdapterBehavior implements ProtocolAdapterBehaviorInter
     }
 
     private String api_connect(String gameId) {
-        return "";
+        StringBuilder content = new StringBuilder();
+        try {
+            URL x;
+            x = new URL("http://cs2.uco.edu/~gq011/tictactoe/server/?controller=api&method=connect&gameid=" + gameId);
+            URLConnection urlConnection = x.openConnection();
+            try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()))) {
+                String line;
+                while ((line = bufferedReader.readLine()) != null) {
+                    content.append(line).append("\n");
+                }
+            }
+        } catch (MalformedURLException ex) {
+            Logger.getLogger(ProtocolAdapter.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(ProtocolAdapter.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return content.toString().trim();
     }
 
     private int api_status(String gameId) {
