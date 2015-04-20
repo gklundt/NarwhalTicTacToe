@@ -10,6 +10,18 @@
  */
 public class Main {
 	public static void main(String args[]){
-		GameWindow gw = new GameWindow(new GameController());
+            final GameData data;
+            data = new GameData();
+            AbstractProtocolAdapter pa = new ProtocolAdapter();
+            pa.start("",data);
+            
+            System.out.printf("ID: %s \n"
+                    + "Mode: %s \n"
+                    + "Player: %s \n"
+                    + "Result: %s \n"
+                    + "Time: %s \n", data.gameId, data.gameMode, data.player, data.result, data.timeLeft);
+            
+//            GameEngine ge = new Engine();
+//            GameWindow gw = new GameWindow(new GameController());
 	}	
 }
