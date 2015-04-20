@@ -9,15 +9,6 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-/**
- *
- * @author gordon
- */
 public class RestProtocolAdapterBehavior implements ProtocolAdapterBehaviorInterface {
 
     private String playerId;
@@ -25,18 +16,41 @@ public class RestProtocolAdapterBehavior implements ProtocolAdapterBehaviorInter
     @Override
     public void start(String uri, GameData data) {
 
-        data.gameId = (data.gameId == null || data.gameId.length() == 0) ? this.api_start() : data.gameId;
         data.gameMode = GameMode.NORMAL;
         // todo: set data.gameSequence
-        data.player = Player.PLAYER1;
+
+        if (data.gameId == null || data.gameId.length() == 0) {
+            data.gameId = this.api_start();
+            data.player = Player.PLAYER1;
+        } else {
+            data.player = Player.PLAYER2;
+        }
+
         data.result = Result.NONE;
         data.timeLeft = 30000;
         this.playerId = this.api_connect(data.gameId);
+        System.out.printf("PlayerId: %s \n", this.playerId);
+
+        while (this.api_status(data.gameId) == 0) {
+            try {
+
+//                System.out.printf("ID: %s \n"
+//                        + "Mode: %s \n"
+//                        + "Player: %s \n"
+//                        + "Result: %s \n"
+//                        + "Time: %s \n", data.gameId, data.gameMode, data.player, data.result, data.timeLeft);
+
+                Thread.sleep(10000);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(RestProtocolAdapterBehavior.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
 
     }
 
     @Override
-    public void getOpponentMove(GameData data) {
+    public void getOpponentMove(GameData data
+    ) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -61,23 +75,107 @@ public class RestProtocolAdapterBehavior implements ProtocolAdapterBehaviorInter
     }
 
     private String api_connect(String gameId) {
-        return "";
+        StringBuilder content = new StringBuilder();
+        try {
+            URL x;
+            x = new URL("http://cs2.uco.edu/~gq011/tictactoe/server/?controller=api&method=connect&gameid=" + gameId);
+            URLConnection urlConnection = x.openConnection();
+            try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()))) {
+                String line;
+                while ((line = bufferedReader.readLine()) != null) {
+                    content.append(line).append("\n");
+                }
+            }
+        } catch (MalformedURLException ex) {
+            Logger.getLogger(ProtocolAdapter.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(ProtocolAdapter.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return content.toString().trim();
     }
 
     private int api_status(String gameId) {
-        return 0;
+        StringBuilder content = new StringBuilder();
+        try {
+            URL x;
+            x = new URL("http://cs2.uco.edu/~gq011/tictactoe/server/?controller=api&method=status&gameid=" + gameId);
+            URLConnection urlConnection = x.openConnection();
+            try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()))) {
+                String line;
+                while ((line = bufferedReader.readLine()) != null) {
+                    content.append(line).append("\n");
+                }
+            }
+        } catch (MalformedURLException ex) {
+            Logger.getLogger(ProtocolAdapter.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(ProtocolAdapter.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return Integer.parseInt(content.toString().trim());
     }
 
     private String api_mode(String gameId) {
-        return "";
+        StringBuilder content = new StringBuilder();
+        try {
+            URL x;
+            x = new URL("http://cs2.uco.edu/~gq011/tictactoe/server/?controller=api&method=mode&gameid=" + gameId);
+            URLConnection urlConnection = x.openConnection();
+            try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()))) {
+                String line;
+                while ((line = bufferedReader.readLine()) != null) {
+                    content.append(line).append("\n");
+                }
+            }
+        } catch (MalformedURLException ex) {
+            Logger.getLogger(ProtocolAdapter.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(ProtocolAdapter.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return content.toString().trim();
     }
 
     private boolean api_move(String gameId, String playerId, int move) {
-        return true;
+        StringBuilder content = new StringBuilder();
+        try {
+            URL x;
+            x = new URL("http://cs2.uco.edu/~gq011/tictactoe/server/?controller=api&method=move&gameid=" + gameId +"&playerid=" + playerId + "&position=" + move);
+            URLConnection urlConnection = x.openConnection();
+            try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()))) {
+                String line;
+                while ((line = bufferedReader.readLine()) != null) {
+                    content.append(line).append("\n");
+                }
+            }
+        } catch (MalformedURLException ex) {
+            Logger.getLogger(ProtocolAdapter.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(ProtocolAdapter.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return Boolean.parseBoolean(content.toString().trim());
     }
 
-    private ArrayList<Integer> api_grid(String gameId) {
-        return new ArrayList<>();
+    private void api_grid(String gameId, GameData data) {
+        StringBuilder content = new StringBuilder();
+        try {
+            URL x;
+            x = new URL("http://cs2.uco.edu/~gq011/tictactoe/server/?controller=api&method=grid&gameid=" + gameId);
+            URLConnection urlConnection = x.openConnection();
+            try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()))) {
+                String line;
+                while ((line = bufferedReader.readLine()) != null) {
+                    content.append(line).append("\n");
+                }
+            }
+        } catch (MalformedURLException ex) {
+            Logger.getLogger(ProtocolAdapter.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(ProtocolAdapter.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        //API returns ...
+        //["X","O","O","","X","X","","","O"]
+        
+        //todo: update data.gameSequence
+
     }
 
 }
