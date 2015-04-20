@@ -12,12 +12,7 @@
 public class Main {
 
     public static void main(String args[]) {
-        final GameData data;
-        data = new GameData();
-        AbstractProtocolAdapter pa = new ProtocolAdapter();
-        pa.start("", data);
-
-//            GameEngine ge = new Engine();
-//            GameWindow gw = new GameWindow(new GameController());
+        GameEngine ge = new Engine();
+        GameWindow gw = new GameWindow(new GameController());
     }
 }
