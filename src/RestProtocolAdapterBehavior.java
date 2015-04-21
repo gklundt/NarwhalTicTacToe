@@ -42,7 +42,7 @@ public class RestProtocolAdapterBehavior implements ProtocolAdapterBehaviorInter
         int myMove = data.gameSequence.getLast();
         boolean accepted = this.api_move(data.gameId, this.playerId, myMove);
         if (accepted) {
-            this.apiBoard[myMove] = this.imPlayer == Player.PLAYER1 ? "X" : "0";
+            this.apiBoard[myMove] = this.imPlayer == Player.PLAYER1 ? "X" : "O";
             data.player = this.imPlayer == Player.PLAYER1 ? Player.PLAYER2 : Player.PLAYER1;
             this.waitForMyTurn(data);
         } else {
