@@ -1,6 +1,3 @@
-//refactor joinAgainPanel to be same panel for start screen
-//fjfjfjfjfslkdfsjkldfsjkl
-//and consider issue of components being removed when added elsewhere
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Container;
@@ -21,19 +18,18 @@ public class GameWindow extends JFrame implements GameObserver {
 
     private final AbstractGameController myGameController;
 	private final ButtonListener btnObserver;
-	private final JButton startGameBtn;
+	public final JButton startGameBtn;
 	private final JPanel cards;
 	private final static String STARTGAMECARD = "Card for starting Game";
 	private final static String PLAYGAMECARD = "Card for playing Game";
 	private final JButton startGameBtn2;
-	private final JPanel startPanel;
-	private final JPanel joinAgainPanel;
-	private final JTextField codeText;
-	private final JTextField codeText2;
+	private final JPanel startGamePanel;
+	public final JTextField codeText;
 	private final JLabel timeLeftLabel;
 	private final JLabel whosTurnLabel;
 	private final JLabel gameModeLabel;
-	private final ArrayList buttonList; 
+	private final ArrayList<JButton> buttonList; 
+	private final JPanel statsPanel;
 
     public GameWindow(AbstractGameController gc) {
 		//observe any changes in myGameController
@@ -49,11 +45,10 @@ public class GameWindow extends JFrame implements GameObserver {
 		//One card for gameplay
 		JPanel playGameCard = new JPanel(new BorderLayout());
 		cards = new JPanel(new CardLayout());
-		startPanel = new JPanel();
 		JPanel buttonPanel = new JPanel(new GridLayout(3,3));
-		JPanel statsPanel = new JPanel(new BorderLayout());
+		statsPanel = new JPanel(new BorderLayout());
 		JPanel gameModePanel = new JPanel();
-		joinAgainPanel = new JPanel(new GridLayout(3, 1));
+		startGamePanel = new JPanel(new GridLayout(3, 1));
 
 		Font buttonFont = new Font("Courier New", Font.BOLD, 180);
 		
@@ -63,8 +58,6 @@ public class GameWindow extends JFrame implements GameObserver {
 			buttonPanel.add(b);
 			buttonList.add(b);
 		}
-
-
 
 		gameModeLabel = new JLabel("Movement Mode");
 		timeLeftLabel = new JLabel("timeLeft");
@@ -76,41 +69,23 @@ public class GameWindow extends JFrame implements GameObserver {
 		btnObserver = new ButtonListener();
 		startGameBtn.addActionListener(btnObserver);
 		startGameBtn2.addActionListener(btnObserver);
-
-		JPanel codePanel = new JPanel(new GridLayout(2, 1));
 		codeText = new JTextField("");
-		codeText2 = new JTextField();
-		codePanel.add(new JLabel("Game ID"));
-		codePanel.add(codeText);
 
 		//add components to containers
-		startPanel.add(startGameBtn);
-		startPanel.add(codePanel);
-		startPageCard.add(startPanel);
+		startPageCard.add(startGamePanel);
 		playGameCard.add(buttonPanel, "Center");
 		statsLabelContainer.add(timeLeftLabel);
 		statsLabelContainer.add(whosTurnLabel);
 		statsPanel.add(statsLabelContainer, "North");
-		statsPanel.add(joinAgainPanel, "South");
-		joinAgainPanel.add(startGameBtn2);
-		joinAgainPanel.add(new JLabel("Game ID"));
-		joinAgainPanel.add(codeText2);
-		//joinAgainPanel.setVisible(false);
+		startGamePanel.add(startGameBtn/*2*/);
+		startGamePanel.add(new JLabel("Game ID"));
+		startGamePanel.add(codeText);
 		playGameCard.add(statsPanel, "East");
 		gameModePanel.add(gameModeLabel);
 		playGameCard.add(gameModePanel, "South");
 		cards.add(startPageCard, STARTGAMECARD);
 		cards.add(playGameCard, PLAYGAMECARD);
 		rootWindow.add(cards, BorderLayout.CENTER);
-
-		//dumb test strings
-		//statsPanel.add( new JTextField(new String("statsPanel")), "North");
-		//buttonPanel.add( new JTextField(new String("buttonPanel")));
-		//gameModePanel.add( new JTextField(new String("gameModePanel")));
-		
-		
-		//JPanel hidden for Join Game/Start Game in gameplay card
-		//--needs button and textbox
 
 
 		//make start game button default button for enter
@@ -137,10 +112,41 @@ public class GameWindow extends JFrame implements GameObserver {
     }
 
 	private void updateBoard(GameData data) {
+		//normal mode for first 8 moves
 		//if we are first player use evens 0, 2, 4 indices in history for X's (or narwhals)
-
 		//if we are second player use odds 1, 3, 5 indices in history for O's (or squids)
-		
+                Integer[] gs = data.gameSequence.toArray( new Integer[data.gameSequence.size()]);
+            
+			for(int i = 0; i < 8; i++){
+				for(int j=0; j < 9; j++){
+					if(gs[i] == j){
+						if(data.player.equals(Player.PLAYER1)){
+							if((i % 2) == 0){
+								buttonList.get(j).setText("X");
+							}
+							else {
+								buttonList.get(j).setText("O");
+							}
+						}else{
+							if((i % 2) == 0){
+								buttonList.get(j).setText("O");
+							}
+							else {
+								buttonList.get(j).setText("X");
+							}
+						}
+					}
+				}
+			}
+			//slide mode
+			for(int i = 8; i < gs.length; i++){
+				for(int j = 0; j < 9; j++){
+					if(buttonList.get(j).getText().equals("")){
+						buttonList.get(j).setText(buttonList.get(gs[i]).getText());
+						buttonList.get(gs[i]).setText("");
+					}
+				}
+			}
 	}
 
 
@@ -163,33 +169,29 @@ public class GameWindow extends JFrame implements GameObserver {
 		}
 	}
 
-class ButtonListener implements ActionListener {
+	class ButtonListener implements ActionListener {
 
-    @Override
-    public void actionPerformed(ActionEvent ae) {
-       JButton buttonPressed = (JButton) (ae.getSource());
-		if(buttonPressed.equals(startGameBtn)){
-			if(codeText.getText().equals("")){
-				//myGameController.start();
-			} else {
-				//myGameController.start(codeText gameID)
-			}
+		@Override
+		public void actionPerformed(ActionEvent ae) {
+		   JButton buttonPressed = (JButton) (ae.getSource());
+			if(buttonPressed.equals(startGameBtn)){
+				if(codeText.getText().equals("")){
+					//myGameController.start();
+				} else {
+					//myGameController.start(codeText gameID)
+				}
 
+				//move startGamePanel to second card
+				statsPanel.add(startGamePanel, "South");
 
-			//joinAgainPanel.setVisible(false);
-			CardLayout c1 = (CardLayout)(cards.getLayout());
-			c1.show(cards, PLAYGAMECARD);
-		} else if (buttonPressed.equals(startGameBtn2)){
-			if(codeText2.getText().equals("")){
-				//myGameController.start();
-			} else {
-				//myGameController.start(String gameID)
-			}
+				//make start game button default button for enter
+				JRootPane rootPane = SwingUtilities.getRootPane(startGameBtn);
+				rootPane.setDefaultButton(startGameBtn);
 
-			
+				//switch to next card
+				CardLayout c1 = (CardLayout)(cards.getLayout());
+				c1.show(cards, PLAYGAMECARD);
+			}     
 		}
-    }
-
-}
-	
+	}
 }
