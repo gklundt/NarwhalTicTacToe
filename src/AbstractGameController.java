@@ -9,7 +9,13 @@ public abstract class AbstractGameController {
     /**
      * 
      */
-    protected ArrayList<GameObserver> gameObservers;
+    public AbstractGameController() {
+    }
+
+    /**
+     * 
+     */
+    protected Set<GameObserver> gameObservers;
 
     /**
      * 
@@ -28,9 +34,8 @@ public abstract class AbstractGameController {
      * @param ge 
      * @param pa
      */
-    public AbstractGameController(GameEngine ge, AbstractProtocolAdapter pa) {
-        this.ge = ge;
-        this.pa = pa;
+    public void AbstractGameController(GameEngine ge, AbstractProtocolAdapter pa) {
+        // TODO implement here
     }
 
     /**
@@ -41,7 +46,7 @@ public abstract class AbstractGameController {
     /**
      * 
      */
-    protected abstract void notifyObservers();
+    //protected abstract void notify();
 
     /**
      * @param uri

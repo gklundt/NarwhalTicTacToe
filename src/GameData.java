@@ -1,17 +1,45 @@
 
-import java.util.ArrayDeque;
-import java.util.Deque;
+import java.util.*;
 
+/**
+ * 
+ */
 public class GameData {
 
-    public GameData(){
-        this.gameSequence = new ArrayDeque<>();
+    /**
+     * 
+     */
+    public GameData() {
     }
-    public Deque<Integer> gameSequence;
+
+    /**
+     * 
+     */
+    public int[] gameSequence;
+
+    /**
+     * 
+     */
     public int timeLeft;
+
+    /**
+     * 
+     */
     public GameMode gameMode;
+
+    /**
+     * 
+     */
     public Result result;
+
+    /**
+     * 
+     */
     public Player player;
+
+    /**
+     * 
+     */
     public String gameId;
-    
+
 }

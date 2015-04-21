@@ -13,9 +13,7 @@ public class GameController extends AbstractGameController {
     /**
      * 
      */
-    public GameController(GameEngine ge, AbstractProtocolAdapter pa) {
-        super(ge, pa);
-        
+    public GameController() {
     }
 
     /**
@@ -29,6 +27,13 @@ public class GameController extends AbstractGameController {
     public void subscribe(GameObserver obs ) {
         // TODO implement here
     }
+
+    /**
+     * 
+     */
+    /*protected void notify() {
+        // TODO implement here
+    }*/
 
     /**
      * @param uri 
@@ -53,11 +58,5 @@ public class GameController extends AbstractGameController {
     private void control() {
         // TODO implement here
     }
-
-	@Override
-	protected void notifyObservers() {
-		// TODO Auto-generated method stub
-		
-	}
 
 }

@@ -4,7 +4,7 @@ import java.util.*;
 /**
  * 
  */
-public abstract class AbstractProtocolAdapter  {
+public abstract class AbstractProtocolAdapter {
 
     /**
      * 
