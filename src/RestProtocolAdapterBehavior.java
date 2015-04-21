@@ -29,7 +29,7 @@ public class RestProtocolAdapterBehavior implements ProtocolAdapterBehaviorInter
             this.imPlayer = Player.PLAYER1;
         } else {
             data.player = Player.PLAYER2;
-            this.imPlayer = Player.PLAYER2
+            this.imPlayer = Player.PLAYER2;
         }
 
         data.result = Result.NONE;
@@ -74,10 +74,10 @@ public class RestProtocolAdapterBehavior implements ProtocolAdapterBehaviorInter
                 this.api_grid(data.gameId, data);
                 break;
             case 3:
-                data.result = this.imPlayer = Player.PLAYER1 ? Result.WIN : Result.LOSE;
+                data.result = this.imPlayer == Player.PLAYER1 ? Result.WIN : Result.LOSE;
                 break;
             case 4:
-                data.result = this.imPlayer = Player.PLAYER2 ? Result.WIN : Result.LOSE;
+                data.result = this.imPlayer == Player.PLAYER2 ? Result.WIN : Result.LOSE;
                 break;
             default:
                 // dont' know ... we win!
