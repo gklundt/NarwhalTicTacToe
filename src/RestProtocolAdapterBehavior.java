@@ -25,32 +25,46 @@ public class RestProtocolAdapterBehavior implements ProtocolAdapterBehaviorInter
 
         if (data.gameId == null || data.gameId.length() == 0) {
             data.gameId = this.api_start();
-            data.player = Player.PLAYER1;
             this.imPlayer = Player.PLAYER1;
         } else {
-            data.player = Player.PLAYER2;
             this.imPlayer = Player.PLAYER2;
         }
 
         data.result = Result.NONE;
         data.timeLeft = 30000;
         this.playerId = this.api_connect(data.gameId);
-        System.out.printf("PlayerId: %s \n", this.playerId);
         this.waitForMyTurn(data);
     }
 
     @Override
     public void getOpponentMove(GameData data) {
         // send my move
-        boolean accepted = this.api_move(data.gameId, this.playerId, data.gameSequence.getLast());
+        int myMove = data.gameSequence.getLast();
+        boolean accepted = this.api_move(data.gameId, this.playerId, myMove);
         if (accepted) {
+            this.apiBoard[myMove] = this.imPlayer == Player.PLAYER1 ? "X" : "0";
+            data.player = this.imPlayer == Player.PLAYER1 ? Player.PLAYER2 : Player.PLAYER1;
             this.waitForMyTurn(data);
-            data.player = data.player == Player.PLAYER1 ? Player.PLAYER2 : Player.PLAYER1;
+        } else {
+            data.gameSequence.removeLast();
         }
-        // not accepted data continues unchanged
+
+    }
+
+    private void printGameData(GameData data) {
+        System.out.printf("PlayerId: %s \n", this.playerId);
+        System.out.printf("I\'m player: %s \n", this.imPlayer);
+        System.out.printf("GameId: %s \n", data.gameId);
+        System.out.printf("Mode: %s \n", data.gameMode);
+        System.out.printf("Sequence: %s \n", data.gameSequence);
+        System.out.printf("Player Turn: %s \n", data.player);
+        System.out.printf("TimeLeft: %s \n", data.timeLeft);
+        System.out.printf("Result: %s \n", data.result);
     }
 
     private void waitForMyTurn(GameData data) {
+        System.out.println("Begin Waiting for My Turn");
+        this.printGameData(data);
 
         int gamestatus = this.api_status(data.gameId);
         int myTurn = this.imPlayer == Player.PLAYER1 ? 1 : 2;
@@ -83,6 +97,11 @@ public class RestProtocolAdapterBehavior implements ProtocolAdapterBehaviorInter
                 // dont' know ... we win!
                 data.result = Result.WIN;
         }
+
+        data.player = this.imPlayer;
+        System.out.println("End Waiting for My Turn");
+        this.printGameData(data);
+        System.out.println();
 
     }
 
@@ -183,7 +202,7 @@ public class RestProtocolAdapterBehavior implements ProtocolAdapterBehaviorInter
         } catch (IOException ex) {
             Logger.getLogger(ProtocolAdapter.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return Boolean.parseBoolean(content.toString().trim());
+        return !content.toString().trim().isEmpty();
     }
 
     private void api_grid(String gameId, GameData data) {
