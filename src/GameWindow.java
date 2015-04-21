@@ -115,9 +115,11 @@ public class GameWindow extends JFrame implements GameObserver {
 		//normal mode for first 8 moves
 		//if we are first player use evens 0, 2, 4 indices in history for X's (or narwhals)
 		//if we are second player use odds 1, 3, 5 indices in history for O's (or squids)
+                Integer[] gs = data.gameSequence.toArray( new Integer[data.gameSequence.size()]);
+            
 			for(int i = 0; i < 8; i++){
 				for(int j=0; j < 9; j++){
-					if(data.gameSequence[i] == j){
+					if(gs[i] == j){
 						if(data.player.equals(Player.PLAYER1)){
 							if((i % 2) == 0){
 								buttonList.get(j).setText("X");
@@ -137,11 +139,11 @@ public class GameWindow extends JFrame implements GameObserver {
 				}
 			}
 			//slide mode
-			for(int i = 8; i < data.gameSequence.length; i++){
+			for(int i = 8; i < gs.length; i++){
 				for(int j = 0; j < 9; j++){
 					if(buttonList.get(j).getText().equals("")){
-						buttonList.get(j).setText(buttonList.get(data.gameSequence[i]).getText());
-						buttonList.get(data.gameSequence[i]).setText("");
+						buttonList.get(j).setText(buttonList.get(gs[i]).getText());
+						buttonList.get(gs[i]).setText("");
 					}
 				}
 			}
