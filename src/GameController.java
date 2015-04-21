@@ -1,46 +1,35 @@
 
 import java.util.*;
 
-//Now I'm testing stuff! It's super funky on Eclipse so I hope I don't ruin everything!!!
-//Bump
-//Another test
-//and now one more time, just to see if I understand this!
 /**
  * 
  */
 public class GameController extends AbstractGameController {
 
+	private GameData gd;
+	
     /**
      * 
      */
-    public GameController() {
+    public GameController(GameEngine ge, ProtocolAdapter pa) {
+    	super(ge, pa);
+    	gd = new GameData();
     }
-
-    /**
-     * 
-     */
-    private GameData gd;
 
     /**
      * @param obs
      */
     public void subscribe(GameObserver obs ) {
-        // TODO implement here
+        gameObservers.add(obs);
     }
-
-    /**
-     * 
-     */
-    /*protected void notify() {
-        // TODO implement here
-    }*/
 
     /**
      * @param uri 
      * @return
      */
     public void start(String uri) {
-        // TODO implement here
+    	pa.start(uri, gd);
+    	control();
     }
 
     /**
@@ -49,14 +38,29 @@ public class GameController extends AbstractGameController {
      * @return
      */
     public void start(String uri, String code) {
-        // TODO implement here
+        gd.gameId = code;
+    	pa.start(uri, gd);
+    	control();
     }
 
     /**
      * 
      */
     private void control() {
-        // TODO implement here
+        while (gd.result == Result.NONE) {
+        	pa.getOpponentMove(gd);
+        	notifyObservers();
+        	ge.getMove(gd);
+        	notifyObservers();
+        }
     }
+
+	@Override
+	protected void notifyObservers() {
+		for (GameObserver go : gameObservers) {
+			go.update(gd);
+		}
+		
+	}
 
 }
