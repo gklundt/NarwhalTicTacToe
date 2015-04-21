@@ -13,5 +13,5 @@ public class GameData {
     public Result result;
     public Player player;
     public String gameId;
-
+    
 }
