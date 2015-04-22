@@ -29,7 +29,7 @@ public class GameController extends AbstractGameController implements Runnable {
     public void start(String uri) {
     	gd = new GameData();
     	pa.start(uri, gd);
-    	control();
+    	//control();
     }
 
     /**
@@ -41,7 +41,7 @@ public class GameController extends AbstractGameController implements Runnable {
     	gd = new GameData();
     	gd.gameId = code;
     	pa.start(uri, gd);
-    	control();
+    	//control();
     }
 
     /** This is the main game loop. Controls the flow of the game.
@@ -75,7 +75,7 @@ public class GameController extends AbstractGameController implements Runnable {
 
 	@Override
 	public void run() {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+		control();
 	}
 
 }

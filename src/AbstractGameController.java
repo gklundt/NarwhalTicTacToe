@@ -2,7 +2,7 @@
 import java.util.ArrayList;
 
 
-public abstract class AbstractGameController {
+public abstract class AbstractGameController implements Runnable{
 
     protected ArrayList<GameObserver> gameObservers;
     protected GameEngine ge;

@@ -195,14 +195,15 @@ public class GameWindow extends JFrame implements GameObserver {
 			rootPane.setDefaultButton(startGameBtn);
 			if(buttonPressed.equals(startGameBtn)){
 				if(codeText.getText().equals("")){
-					
-					myGameController.startGame("");
-					myGameController.start();
+					myGameController.start("");
+					//myGameController.start();
 				} else {
-					myGameController.startGame("", codeText.getText());
-					myGameController.start();
+					myGameController.start("", codeText.getText());
+					//myGameController.start();
 				}
-			}     
+			}
+                        Thread gameThread = new Thread(myGameController);
+                        gameThread.start();
 		}
 	}
 }
