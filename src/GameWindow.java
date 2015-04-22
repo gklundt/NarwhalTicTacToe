@@ -187,19 +187,20 @@ public class GameWindow extends JFrame implements GameObserver {
 		   JButton buttonPressed = (JButton) (ae.getSource());
 			//switch to next card
 			CardLayout c1 = (CardLayout)(cards.getLayout());
-			c1.next(cards);
+			c1.show(cards, PLAYGAMECARD);
 			//move startGamePanel to second card
 			statsPanel.add(startGamePanel, "South");
 			//make start game button default button for enter
 			JRootPane rootPane = SwingUtilities.getRootPane(startGameBtn);
 			rootPane.setDefaultButton(startGameBtn);
-			repaint();
-			validate();
 			if(buttonPressed.equals(startGameBtn)){
 				if(codeText.getText().equals("")){
-					myGameController.start("");
+					
+					myGameController.startGame("");
+					myGameController.start();
 				} else {
-					myGameController.start("", codeText.getText());
+					myGameController.startGame("", codeText.getText());
+					myGameController.start();
 				}
 			}     
 		}

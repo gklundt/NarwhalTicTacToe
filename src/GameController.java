@@ -4,7 +4,7 @@ import java.util.*;
 /**
  * 
  */
-public class GameController extends AbstractGameController {
+public class GameController extends AbstractGameController implements Runnable {
 
 	private GameData gd;
 	
@@ -45,7 +45,7 @@ public class GameController extends AbstractGameController {
     }
 
     /** This is the main game loop. Controls the flow of the game.
-     * 
+     *  implement the control method in the run() method. 
      */
     private void control() {
         while (gd.result == Result.NONE) {
@@ -71,6 +71,11 @@ public class GameController extends AbstractGameController {
 		
 		
 		
+	}
+
+	@Override
+	public void run() {
+		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 	}
 
 }
