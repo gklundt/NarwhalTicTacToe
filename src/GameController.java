@@ -13,7 +13,6 @@ public class GameController extends AbstractGameController {
      */
     public GameController(GameEngine ge, AbstractProtocolAdapter pa) {
     	super(ge, pa);
-    	gd = new GameData();
     }
 
     /**
@@ -28,6 +27,7 @@ public class GameController extends AbstractGameController {
      * @return
      */
     public void start(String uri) {
+    	gd = new GameData();
     	pa.start(uri, gd);
     	control();
     }
@@ -38,7 +38,8 @@ public class GameController extends AbstractGameController {
      * @return
      */
     public void start(String uri, String code) {
-        gd.gameId = code;
+    	gd = new GameData();
+    	gd.gameId = code;
     	pa.start(uri, gd);
     	control();
     }
@@ -48,11 +49,12 @@ public class GameController extends AbstractGameController {
      */
     private void control() {
         while (gd.result == Result.NONE) {
-        	ge.getMove(gd);
+        	notifyObservers();
+        	gd.gameSequence.add(ge.getMove(gd));
         	notifyObservers();
         	pa.getOpponentMove(gd);
-        	notifyObservers();
         }
+        gd = null;
     }
 
 	@Override
@@ -60,6 +62,8 @@ public class GameController extends AbstractGameController {
 		for (GameObserver go : gameObservers) {
 			go.update(gd);
 		}
+		
+		
 		
 	}
 
