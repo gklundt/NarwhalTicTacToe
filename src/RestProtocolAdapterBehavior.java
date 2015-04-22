@@ -24,21 +24,27 @@ public class RestProtocolAdapterBehavior implements ProtocolAdapterBehaviorInter
         data.gameMode = GameMode.NORMAL;
 
         if (data.gameId == null || data.gameId.length() == 0) {
-            data.gameId = this.api_start();
             this.imPlayer = Player.PLAYER1;
+            data.player = Player.PLAYER1;
+			data.result = Result.NONE;
+            data.gameId = this.api_start();
+            this.playerId = this.api_connect(data.gameId);
         } else {
             this.imPlayer = Player.PLAYER2;
+            this.playerId = this.api_connect(data.gameId);
+            this.waitForMyTurn(data);
         }
 
         data.result = Result.NONE;
         data.timeLeft = 30000;
-        this.playerId = this.api_connect(data.gameId);
-        this.waitForMyTurn(data);
     }
 
     @Override
     public void getOpponentMove(GameData data) {
         // send my move
+		if(data.gameSequence.size() < 2){
+			this.waitForMyTurn(data);
+		}
         int myMove = data.gameSequence.getLast();
         boolean accepted = this.api_move(data.gameId, this.playerId, myMove);
         if (accepted) {

@@ -22,7 +22,7 @@ public class GameWindow extends JFrame implements GameObserver {
 	private final JPanel cards;
 	private final static String STARTGAMECARD = "Card for starting Game";
 	private final static String PLAYGAMECARD = "Card for playing Game";
-	private final JButton startGameBtn2;
+	//private final JButton startGameBtn2;
 	private final JPanel startGamePanel;
 	public final JTextField codeText;
 	private final JLabel timeLeftLabel;
@@ -65,10 +65,10 @@ public class GameWindow extends JFrame implements GameObserver {
 		JPanel statsLabelContainer = new JPanel(new GridLayout(2, 1)); 
 
 		startGameBtn = new JButton("Start Game");
-		startGameBtn2 = new JButton("Start Game");
+		//startGameBtn2 = new JButton("Start Game");
 		btnObserver = new ButtonListener();
 		startGameBtn.addActionListener(btnObserver);
-		startGameBtn2.addActionListener(btnObserver);
+		//startGameBtn2.addActionListener(btnObserver);
 		codeText = new JTextField("");
 
 		//add components to containers
@@ -109,15 +109,19 @@ public class GameWindow extends JFrame implements GameObserver {
 		this.updateTimeLeft(data);
 		//this.updateWhosTurn(data);
 		this.updateGameMode(data);
+		this.updateGameId(data);
     }
 
 	private void updateBoard(GameData data) {
 		//normal mode for first 8 moves
 		//if we are first player use evens 0, 2, 4 indices in history for X's (or narwhals)
 		//if we are second player use odds 1, 3, 5 indices in history for O's (or squids)
+		if (!data.gameSequence.isEmpty()){
+
                 Integer[] gs = data.gameSequence.toArray( new Integer[data.gameSequence.size()]);
+
             
-			for(int i = 0; i < 8; i++){
+			for(int i = 0;i < gs.length && i < 8; i++){
 				for(int j=0; j < 9; j++){
 					if(gs[i] == j){
 						if(data.player.equals(Player.PLAYER1)){
@@ -147,6 +151,9 @@ public class GameWindow extends JFrame implements GameObserver {
 					}
 				}
 			}
+		} else {
+			System.out.println("empy deque");
+		}
 	}
 
 
@@ -169,28 +176,32 @@ public class GameWindow extends JFrame implements GameObserver {
 		}
 	}
 
+	private void updateGameId(GameData data) {
+		codeText.setText(data.gameId);
+	}
+
 	class ButtonListener implements ActionListener {
 
 		@Override
 		public void actionPerformed(ActionEvent ae) {
 		   JButton buttonPressed = (JButton) (ae.getSource());
+			//switch to next card
+			CardLayout c1 = (CardLayout)(cards.getLayout());
+			c1.show(cards, PLAYGAMECARD);
+			//move startGamePanel to second card
+			statsPanel.add(startGamePanel, "South");
+			//make start game button default button for enter
+			JRootPane rootPane = SwingUtilities.getRootPane(startGameBtn);
+			rootPane.setDefaultButton(startGameBtn);
 			if(buttonPressed.equals(startGameBtn)){
 				if(codeText.getText().equals("")){
-					//myGameController.start();
+					
+					myGameController.startGame("");
+					myGameController.start();
 				} else {
-					//myGameController.start(codeText gameID)
+					myGameController.startGame("", codeText.getText());
+					myGameController.start();
 				}
-
-				//move startGamePanel to second card
-				statsPanel.add(startGamePanel, "South");
-
-				//make start game button default button for enter
-				JRootPane rootPane = SwingUtilities.getRootPane(startGameBtn);
-				rootPane.setDefaultButton(startGameBtn);
-
-				//switch to next card
-				CardLayout c1 = (CardLayout)(cards.getLayout());
-				c1.show(cards, PLAYGAMECARD);
 			}     
 		}
 	}

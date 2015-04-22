@@ -1,33 +1,25 @@
 
 import java.util.*;
 
-//Now I'm testing stuff! It's super funky on Eclipse so I hope I don't ruin everything!!!
-//Bump
-//Another test
-//and now one more time, just to see if I understand this!
 /**
  * 
  */
-public class GameController extends AbstractGameController {
+public class GameController extends AbstractGameController implements Runnable {
 
+	private GameData gd;
+	
     /**
      * 
      */
     public GameController(GameEngine ge, AbstractProtocolAdapter pa) {
-        super(ge, pa);
-        
+    	super(ge, pa);
     }
-
-    /**
-     * 
-     */
-    private GameData gd;
 
     /**
      * @param obs
      */
     public void subscribe(GameObserver obs ) {
-        // TODO implement here
+        gameObservers.add(obs);
     }
 
     /**
@@ -35,7 +27,9 @@ public class GameController extends AbstractGameController {
      * @return
      */
     public void start(String uri) {
-        // TODO implement here
+    	gd = new GameData();
+    	pa.start(uri, gd);
+    	control();
     }
 
     /**
@@ -44,20 +38,44 @@ public class GameController extends AbstractGameController {
      * @return
      */
     public void start(String uri, String code) {
-        // TODO implement here
+    	gd = new GameData();
+    	gd.gameId = code;
+    	pa.start(uri, gd);
+    	control();
     }
 
-    /**
-     * 
+    /** This is the main game loop. Controls the flow of the game.
+     *  implement the control method in the run() method. 
      */
     private void control() {
-        // TODO implement here
+        while (gd.result == Result.NONE) {
+        	notifyObservers();							// Notify Observers first since GameData
+        												// is changed in the start method.
+        	
+        	gd.gameSequence.add(ge.getMove(gd));		// Get move from the GameEngine and store
+        												// the result in the GameData move history
+        	notifyObservers();							// and notifyObservers();
+        	
+        	pa.getOpponentMove(gd);						// Get the move from the opponent and
+        												// return to the top of the loop to
+        												// notifyObservers();
+        }
+        gd = null;
     }
 
 	@Override
 	protected void notifyObservers() {
-		// TODO Auto-generated method stub
+		for (GameObserver go : gameObservers) {
+			go.update(gd);
+		}
 		
+		
+		
+	}
+
+	@Override
+	public void run() {
+		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 	}
 
 }
