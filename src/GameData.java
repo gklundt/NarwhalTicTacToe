@@ -6,7 +6,6 @@ public class GameData {
 
     public GameData(){
         this.gameSequence = new ArrayDeque<>();
-        result = Result.NONE;
     }
     public Deque<Integer> gameSequence;
     public int timeLeft;
