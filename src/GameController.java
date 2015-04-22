@@ -11,15 +11,9 @@ public class GameController extends AbstractGameController {
     /**
      * 
      */
-<<<<<<< HEAD
-    public GameController(GameEngine ge, ProtocolAdapter pa) {
+    public GameController(GameEngine ge, AbstractProtocolAdapter pa) {
     	super(ge, pa);
     	gd = new GameData();
-=======
-    public GameController(GameEngine ge, AbstractProtocolAdapter pa) {
-        super(ge, pa);
-        
->>>>>>> master
     }
 
     /**
@@ -63,13 +57,9 @@ public class GameController extends AbstractGameController {
 
 	@Override
 	protected void notifyObservers() {
-<<<<<<< HEAD
 		for (GameObserver go : gameObservers) {
 			go.update(gd);
 		}
-=======
-		// TODO Auto-generated method stub
->>>>>>> master
 		
 	}
 

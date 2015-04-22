@@ -12,7 +12,9 @@
 public class Main {
 
     public static void main(String args[]) {
+        AbstractProtocolAdapter pa = new ProtocolAdapter();
         GameEngine ge = new Engine();
-        GameWindow gw = new GameWindow(new GameController());
+        AbstractGameController gc = new GameController(ge,pa);
+        GameWindow gw = new GameWindow(gc);
     }
 }
