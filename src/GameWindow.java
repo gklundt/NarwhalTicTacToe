@@ -97,9 +97,6 @@ public class GameWindow extends JFrame implements GameObserver {
 		this.setVisible(true);
     }
 	
-	private void startGame(){
-	}
-	
 	@Override
     public void update(GameData data ) {
 		this.updateBoard(data);
@@ -199,8 +196,8 @@ public class GameWindow extends JFrame implements GameObserver {
 					//myGameController.start();
 				}
 			}
-                        Thread gameThread = new Thread(myGameController);
-                        gameThread.start();
+            Thread gameThread = new Thread(myGameController);
+            gameThread.start();
 		}
 	}
 }
