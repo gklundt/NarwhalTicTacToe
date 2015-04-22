@@ -10,15 +10,16 @@ public class Engine extends GameEngine {
      * 
      */
     public Engine() {
+        gb = new GameEngineBehaviorRandom();
     }
 
     /**
      * @param game 
      * @return
      */
+    @Override
     public int getMove(GameData game) {
-        // TODO implement here
-        return 0;
+        return gb.getMoveCommon(game);
     }
 
 }
