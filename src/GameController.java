@@ -48,9 +48,9 @@ public class GameController extends AbstractGameController {
      */
     private void control() {
         while (gd.result == Result.NONE) {
-        	pa.getOpponentMove(gd);
-        	notifyObservers();
         	ge.getMove(gd);
+        	notifyObservers();
+        	pa.getOpponentMove(gd);
         	notifyObservers();
         }
     }
