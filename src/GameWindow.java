@@ -109,6 +109,7 @@ public class GameWindow extends JFrame implements GameObserver {
 		this.updateTimeLeft(data);
 		//this.updateWhosTurn(data);
 		this.updateGameMode(data);
+		this.updateGameId(data);
     }
 
 	private void updateBoard(GameData data) {
@@ -169,6 +170,10 @@ public class GameWindow extends JFrame implements GameObserver {
 		}
 	}
 
+	private void updateGameId(GameData data) {
+		codeText.setText(data.gameId);
+	}
+
 	class ButtonListener implements ActionListener {
 
 		@Override
@@ -176,14 +181,14 @@ public class GameWindow extends JFrame implements GameObserver {
 		   JButton buttonPressed = (JButton) (ae.getSource());
 			if(buttonPressed.equals(startGameBtn)){
 				if(codeText.getText().equals("")){
-					//myGameController.start();
+					myGameController.start("");
+					
 				} else {
-					//myGameController.start(codeText gameID)
+					myGameController.start("", codeText.getText());
 				}
 
 				//move startGamePanel to second card
 				statsPanel.add(startGamePanel, "South");
-
 				//make start game button default button for enter
 				JRootPane rootPane = SwingUtilities.getRootPane(startGameBtn);
 				rootPane.setDefaultButton(startGameBtn);
