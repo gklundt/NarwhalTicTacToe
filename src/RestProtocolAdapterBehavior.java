@@ -25,6 +25,7 @@ public class RestProtocolAdapterBehavior implements ProtocolAdapterBehaviorInter
 
         if (data.gameId == null || data.gameId.length() == 0) {
             this.imPlayer = Player.PLAYER1;
+            data.player = Player.PLAYER1;
             data.gameId = this.api_start();
             this.playerId = this.api_connect(data.gameId);
         } else {
