@@ -44,15 +44,21 @@ public class GameController extends AbstractGameController {
     	control();
     }
 
-    /**
+    /** This is the main game loop. Controls the flow of the game.
      * 
      */
     private void control() {
         while (gd.result == Result.NONE) {
-        	notifyObservers();
-        	gd.gameSequence.add(ge.getMove(gd));
-        	notifyObservers();
-        	pa.getOpponentMove(gd);
+        	notifyObservers();							// Notify Observers first since GameData
+        												// is changed in the start method.
+        	
+        	gd.gameSequence.add(ge.getMove(gd));		// Get move from the GameEngine and store
+        												// the result in the GameData move history
+        	notifyObservers();							// and notifyObservers();
+        	
+        	pa.getOpponentMove(gd);						// Get the move from the opponent and
+        												// return to the top of the loop to
+        												// notifyObservers();
         }
         gd = null;
     }
