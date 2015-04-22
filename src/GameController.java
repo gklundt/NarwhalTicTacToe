@@ -1,33 +1,32 @@
 
 import java.util.*;
 
-//Now I'm testing stuff! It's super funky on Eclipse so I hope I don't ruin everything!!!
-//Bump
-//Another test
-//and now one more time, just to see if I understand this!
 /**
  * 
  */
 public class GameController extends AbstractGameController {
 
+	private GameData gd;
+	
     /**
      * 
      */
+<<<<<<< HEAD
+    public GameController(GameEngine ge, ProtocolAdapter pa) {
+    	super(ge, pa);
+    	gd = new GameData();
+=======
     public GameController(GameEngine ge, AbstractProtocolAdapter pa) {
         super(ge, pa);
         
+>>>>>>> master
     }
-
-    /**
-     * 
-     */
-    private GameData gd;
 
     /**
      * @param obs
      */
     public void subscribe(GameObserver obs ) {
-        // TODO implement here
+        gameObservers.add(obs);
     }
 
     /**
@@ -35,7 +34,8 @@ public class GameController extends AbstractGameController {
      * @return
      */
     public void start(String uri) {
-        // TODO implement here
+    	pa.start(uri, gd);
+    	control();
     }
 
     /**
@@ -44,19 +44,32 @@ public class GameController extends AbstractGameController {
      * @return
      */
     public void start(String uri, String code) {
-        // TODO implement here
+        gd.gameId = code;
+    	pa.start(uri, gd);
+    	control();
     }
 
     /**
      * 
      */
     private void control() {
-        // TODO implement here
+        while (gd.result == Result.NONE) {
+        	pa.getOpponentMove(gd);
+        	notifyObservers();
+        	ge.getMove(gd);
+        	notifyObservers();
+        }
     }
 
 	@Override
 	protected void notifyObservers() {
+<<<<<<< HEAD
+		for (GameObserver go : gameObservers) {
+			go.update(gd);
+		}
+=======
 		// TODO Auto-generated method stub
+>>>>>>> master
 		
 	}
 
