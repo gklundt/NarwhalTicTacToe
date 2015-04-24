@@ -2,23 +2,34 @@
 import java.util.*;
 
 /**
- * 
+ *
  */
 public class AchiBehavior implements GameBehavior {
 
-    /**
-     * 
-     */
     public AchiBehavior() {
     }
 
     /**
-     * @param game 
+     * @param myMoves
+     * @param enemyMoves
      * @return
      */
-    public int getMoveCommon(GameData game) {
-        // TODO implement here
-        return 0;
+    @Override
+    public int getMoveCommon(ArrayList myMoves, ArrayList enemyMoves) {
+        int openMove = 0;
+        while (myMoves.contains(openMove) && enemyMoves.contains(openMove)) {
+            openMove++;
+        }
+
+        int nextMove = 0;
+
+        while (nextMove < 9) {
+            if (myMoves.contains(nextMove) && ((nextMove == openMove - 1) || (nextMove == openMove + 1))) {
+                break;
+            }
+            nextMove++;
+        }
+        return nextMove;
     }
 
 }
