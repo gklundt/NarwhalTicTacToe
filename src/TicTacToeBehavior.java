@@ -13,12 +13,10 @@ public class TicTacToeBehavior implements GameBehavior {
     }
 
     /**
-     * @param myMoves
-     * @param enemyMoves
+     * @param game 
      * @return
      */
-    @Override
-    public int getMoveCommon(ArrayList myMoves, ArrayList enemyMoves) {
+    public int getMoveCommon(GameData game) {
         // TODO implement here
         return 0;
     }
