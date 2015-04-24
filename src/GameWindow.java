@@ -93,7 +93,7 @@ public class GameWindow extends JFrame implements GameObserver {
 		this.setTitle("Narwal's Tic Tac Toe");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setLocation(300, 300);
-        this.setSize(500, 500);
+        this.setSize(600, 600);
 		this.setVisible(true);
     }
 	
