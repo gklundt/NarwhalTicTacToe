@@ -8,10 +8,9 @@ public interface GameBehavior {
 
 
     /**
-     * @param myMoves
-     * @param enemyMoves
+     * @param game 
      * @return
      */
-    public int getMoveCommon(ArrayList myMoves, ArrayList enemyMoves);
+    public int getMoveCommon(GameData game);
 
 }
