@@ -137,10 +137,15 @@ public class GameWindow extends JFrame implements GameObserver {
 				}
 			}
 			//slide mode
+			//slide history
 			for(int i = 8; i < gs.length; i++){
+				//board
 				for(int j = 0; j < 9; j++){
+					//if space is empty
 					if(buttonList.get(j).getText().equals("")){
+						//change button j to played indice i 
 						buttonList.get(j).setText(buttonList.get(gs[i]).getText());
+						//set where played indice i was to blank
 						buttonList.get(gs[i]).setText("");
 					}
 				}
