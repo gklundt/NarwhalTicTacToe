@@ -110,6 +110,12 @@ public class GameWindow extends JFrame implements GameObserver {
 		//normal mode for first 8 moves
 		//if we are first player use evens 0, 2, 4 indices in history for X's (or narwhals)
 		//if we are second player use odds 1, 3, 5 indices in history for O's (or squids)
+
+		//clear button text for update
+		for(JButton b: buttonList){
+			b.setText("");
+		}
+
 		if (!data.gameSequence.isEmpty()){
 
                 Integer[] gs = data.gameSequence.toArray( new Integer[data.gameSequence.size()]);
