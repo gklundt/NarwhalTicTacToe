@@ -98,7 +98,6 @@ public class RestProtocolAdapterBehavior implements ProtocolAdapterBehaviorInter
                 break;
             case 4:
                 data.result = this.imPlayer == Player.PLAYER2 ? Result.WIN : Result.LOSE;
-                this.api_grid(data.gameId, data);
                 break;
             default:
                 // dont' know ... we win!
