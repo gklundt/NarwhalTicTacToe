@@ -12,7 +12,7 @@ public class RandomBehavior implements GameBehavior {
             position = (number.nextInt(9));
             if(positionNotFound)
                 positionNotFound = myMoves.contains(position);
-            if(positionNotFound)
+            if(!positionNotFound)
                 positionNotFound = enemyMoves.contains(position);
         } while (positionNotFound);
         System.out.println("Enemy: " + enemyMoves.contains(position));
