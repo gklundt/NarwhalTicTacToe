@@ -93,7 +93,7 @@ public class GameWindow extends JFrame implements GameObserver {
 		this.setTitle("Narwal's Tic Tac Toe");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setLocation(300, 300);
-        this.setSize(500, 500);
+        this.setSize(600, 600);
 		this.setVisible(true);
     }
 	
@@ -137,10 +137,15 @@ public class GameWindow extends JFrame implements GameObserver {
 				}
 			}
 			//slide mode
+			//slide history
 			for(int i = 8; i < gs.length; i++){
+				//board
 				for(int j = 0; j < 9; j++){
+					//if space is empty
 					if(buttonList.get(j).getText().equals("")){
+						//change button j to played indice i 
 						buttonList.get(j).setText(buttonList.get(gs[i]).getText());
+						//set where played indice i was to blank
 						buttonList.get(gs[i]).setText("");
 					}
 				}
