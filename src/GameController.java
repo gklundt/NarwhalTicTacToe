@@ -60,7 +60,7 @@ public class GameController extends AbstractGameController implements Runnable {
         												// return to the top of the loop to
         												// notifyObservers();
         }
-        	
+        notifyObservers();
         gd = null;
     }
 
