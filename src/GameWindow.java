@@ -19,6 +19,8 @@ public class GameWindow extends JFrame implements GameObserver {
     private final AbstractGameController myGameController;
 	private final ButtonListener btnObserver;
 	public final JButton startGameBtn;
+	public final JButton nextHistoryBtn;
+	public final JButton prevHistoryBtn;
 	private final JPanel cards;
 	private final static String STARTGAMECARD = "Card for starting Game";
 	private final static String PLAYGAMECARD = "Card for playing Game";
@@ -29,6 +31,8 @@ public class GameWindow extends JFrame implements GameObserver {
 	private final JLabel gameModeLabel;
 	private final ArrayList<JButton> buttonList; 
 	private final JPanel statsPanel;
+	private ArrayList<GameData>gameHistory;
+	private int gameHistoryDepth;
 
     public GameWindow(AbstractGameController gc) {
 		//observe any changes in myGameController
@@ -36,6 +40,8 @@ public class GameWindow extends JFrame implements GameObserver {
 		gc.subscribe(this);
 
 		buttonList = new ArrayList<>();
+		gameHistory = new ArrayList<>();
+		gameHistoryDepth =-1;
 	
 		Container rootWindow = getContentPane();
 		//Use Card Layout
@@ -48,6 +54,7 @@ public class GameWindow extends JFrame implements GameObserver {
 		statsPanel = new JPanel(new BorderLayout());
 		JPanel gameModePanel = new JPanel();
 		startGamePanel = new JPanel(new GridLayout(3, 1));
+		JPanel gameHistoryButtonsPanel = new JPanel(new GridLayout(1,2));
 
 		Font buttonFont = new Font("Courier New", Font.BOLD, 180);
 		
@@ -59,20 +66,29 @@ public class GameWindow extends JFrame implements GameObserver {
 		}
 
 		gameModeLabel = new JLabel("Movement Mode");
-		timeLeftLabel = new JLabel("timeLeft");
+//		timeLeftLabel = new JLabel("timeLeft");
+		timeLeftLabel = new JLabel();
 		whosTurnLabel = new JLabel("Waiting on opponent...");
-		JPanel statsLabelContainer = new JPanel(new GridLayout(2, 1)); 
+		JPanel statsLabelContainer = new JPanel(new GridLayout(4, 1)); 
 
 		startGameBtn = new JButton("Start Game");
 		btnObserver = new ButtonListener();
 		startGameBtn.addActionListener(btnObserver);
 		codeText = new JTextField("");
+		prevHistoryBtn = new JButton("<");
+		prevHistoryBtn.addActionListener(btnObserver);
+		nextHistoryBtn = new JButton(">");
+		nextHistoryBtn.addActionListener(btnObserver);
 
 		//add components to containers
+		gameHistoryButtonsPanel.add(prevHistoryBtn);
+		gameHistoryButtonsPanel.add(nextHistoryBtn);
 		startPageCard.add(startGamePanel);
 		playGameCard.add(buttonPanel, "Center");
 		statsLabelContainer.add(timeLeftLabel);
 		statsLabelContainer.add(whosTurnLabel);
+		statsLabelContainer.add(new JLabel("Game History"));
+		statsLabelContainer.add(gameHistoryButtonsPanel);
 		statsPanel.add(statsLabelContainer, "North");
 		startGamePanel.add(startGameBtn/*2*/);
 		startGamePanel.add(new JLabel("Game ID"));
@@ -101,10 +117,29 @@ public class GameWindow extends JFrame implements GameObserver {
     public void update(GameData data ) {
 		this.updateBoard(data);
 		this.updateTimeLeft(data);
-		//this.updateWhosTurn(data);
+		this.updateWhosTurn(data);
 		this.updateGameMode(data);
 		this.updateGameId(data);
+		//GameData myGameData = (GameData)data.clone();
+		GameData myGameData = new GameData();
+		myGameData.gameId = data.gameId;
+		myGameData.timeLeft = data.timeLeft;
+		myGameData.gameMode = data.gameMode;
+		myGameData.player = data.player;
+		myGameData.result = data.result;
+		for(Integer i: data.gameSequence){
+			myGameData.gameSequence.add(i);
+		}
+		gameHistoryDepth++;
+		gameHistory.add(myGameData);
     }
+	private void updateHistoricalBoard(GameData data){
+		this.updateBoard(data);
+//		this.updateTimeLeft(data);
+		this.updateWhosTurn(data);
+		this.updateGameMode(data);
+		this.updateGameId(data);
+	}
 
 	private void updateBoard(GameData data) {
 		//normal mode for first 8 moves
@@ -168,21 +203,40 @@ public class GameWindow extends JFrame implements GameObserver {
 	}
 
 	//this method is not needed if the server tracks history
-	private void updateWhosTurn() {
+	private void updateWhosTurn(GameData data) {
 		//waiting on opponent... or our turn (something went wrong)
+		if(data.player.equals(Player.PLAYER1) && ((data.gameSequence.size() % 2)==0)){
+			whosTurnLabel.setText("Your Turn");
+		}else if(data.player.equals(Player.PLAYER2) && ((data.gameSequence.size() % 2)!=0)){
+			whosTurnLabel.setText("Your Turn");
+		}else{
+			whosTurnLabel.setText("Waiting on Opponent...");
+		}
+		if(data.result == Result.LOSE){
+			whosTurnLabel.setText("You Lose");
+		}else if(data.result == Result.WIN){
+			whosTurnLabel.setText("You Win");
+		}
 	}
 
 	private void updateGameMode(GameData data) {
-		if(data.gameMode.equals(GameMode.ACHI)){
-			gameModeLabel.setText("Achi Mode");
-		}
-		else{
-			gameModeLabel.setText("Slide Mode");
-		}
+//		if(data.result.equals(Result.NONE)){
+			if(data.gameSequence.size() < 9){
+				gameModeLabel.setText("Normal Mode");
+			}
+			else{
+				gameModeLabel.setText("Achi Mode");
+			}
+//		}
 	}
 
 	private void updateGameId(GameData data) {
 		codeText.setText(data.gameId);
+		if(data.player.equals(Player.PLAYER1)){
+			timeLeftLabel.setText("Player 1");
+		}else{
+			timeLeftLabel.setText("Player 2");
+		}
 	}
 
 	class ButtonListener implements ActionListener {
@@ -206,9 +260,21 @@ public class GameWindow extends JFrame implements GameObserver {
 					myGameController.start("", codeText.getText());
 					//myGameController.start();
 				}
+				Thread gameThread = new Thread(myGameController);
+				gameThread.start();
 			}
-            Thread gameThread = new Thread(myGameController);
-            gameThread.start();
+			else if(buttonPressed.equals(prevHistoryBtn)){
+				if(gameHistoryDepth > 1){
+					gameHistoryDepth--;
+					updateHistoricalBoard(gameHistory.get(gameHistoryDepth));
+				}
+			}
+			else if(buttonPressed.equals(nextHistoryBtn)){
+				if(gameHistoryDepth < gameHistory.size() -1){
+					gameHistoryDepth++;
+					updateHistoricalBoard(gameHistory.get(gameHistoryDepth));
+				}
+			}
 		}
 	}
 }
