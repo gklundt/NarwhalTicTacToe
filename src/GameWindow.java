@@ -118,7 +118,7 @@ public class GameWindow extends JFrame implements GameObserver {
 		gameHistory.add(data);
 		this.updateBoard(data);
 		this.updateTimeLeft(data);
-		//this.updateWhosTurn(data);
+		this.updateWhosTurn(data);
 		this.updateGameMode(data);
 		this.updateGameId(data);
     }
@@ -185,16 +185,30 @@ public class GameWindow extends JFrame implements GameObserver {
 	}
 
 	//this method is not needed if the server tracks history
-	private void updateWhosTurn() {
+	private void updateWhosTurn(GameData data) {
 		//waiting on opponent... or our turn (something went wrong)
+		if(data.player.equals(Player.PLAYER1) && ((data.gameSequence.size() % 2)==0)){
+			whosTurnLabel.setText("Your Turn");
+		}else if(data.player.equals(Player.PLAYER2) && ((data.gameSequence.size() % 2)!=0)){
+			whosTurnLabel.setText("Your Turn");
+		}else{
+			whosTurnLabel.setText("Waiting on Opponent...");
+		}
+		if(data.result == Result.LOSE){
+			whosTurnLabel.setText("You Lose");
+		}else if(data.result == Result.WIN){
+			whosTurnLabel.setText("You Win");
+		}
 	}
 
 	private void updateGameMode(GameData data) {
-		if(data.gameMode.equals(GameMode.ACHI)){
-			gameModeLabel.setText("Achi Mode");
-		}
-		else{
-			gameModeLabel.setText("Slide Mode");
+		if(data.result.equals(Result.NONE)){
+			if(data.gameSequence.size() < 9){
+				gameModeLabel.setText("Normal Mode");
+			}
+			else{
+				gameModeLabel.setText("Achi Mode");
+			}
 		}
 	}
 
