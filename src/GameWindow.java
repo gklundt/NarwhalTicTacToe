@@ -101,7 +101,7 @@ public class GameWindow extends JFrame implements GameObserver {
     public void update(GameData data ) {
 		this.updateBoard(data);
 		this.updateTimeLeft(data);
-		//this.updateWhosTurn(data);
+		this.updateWhosTurn(data);
 		this.updateGameMode(data);
 		this.updateGameId(data);
     }
@@ -168,8 +168,15 @@ public class GameWindow extends JFrame implements GameObserver {
 	}
 
 	//this method is not needed if the server tracks history
-	private void updateWhosTurn() {
+	private void updateWhosTurn(GameData data) {
 		//waiting on opponent... or our turn (something went wrong)
+		if(data.player.equals(Player.PLAYER1) && ((data.gameSequence.size() % 2)==0)){
+			whosTurnLabel.setText("Your Turn");
+		}else if(data.player.equals(Player.PLAYER2) && ((data.gameSequence.size() % 2)!=0)){
+			whosTurnLabel.setText("Your Turn");
+		}else{
+			whosTurnLabel.setText("Waiting on Opponent...");
+		}
 	}
 
 	private void updateGameMode(GameData data) {
