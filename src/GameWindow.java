@@ -31,7 +31,7 @@ public class GameWindow extends JFrame implements GameObserver {
 	private final JLabel gameModeLabel;
 	private final ArrayList<JButton> buttonList; 
 	private final JPanel statsPanel;
-	private final ArrayList<GameData>gameHistory;
+	private ArrayList<GameData>gameHistory;
 	private int gameHistoryDepth;
 
     public GameWindow(AbstractGameController gc) {
@@ -114,14 +114,31 @@ public class GameWindow extends JFrame implements GameObserver {
 	
 	@Override
     public void update(GameData data ) {
-		gameHistoryDepth++;
-		gameHistory.add(data);
 		this.updateBoard(data);
 		this.updateTimeLeft(data);
 		this.updateWhosTurn(data);
 		this.updateGameMode(data);
 		this.updateGameId(data);
+		//GameData myGameData = (GameData)data.clone();
+		GameData myGameData = new GameData();
+		myGameData.gameId = data.gameId;
+		myGameData.timeLeft = data.timeLeft;
+		myGameData.gameMode = data.gameMode;
+		myGameData.player = data.player;
+		myGameData.result = data.result;
+		for(Integer i: data.gameSequence){
+			myGameData.gameSequence.add(i);
+		}
+		gameHistoryDepth++;
+		gameHistory.add(myGameData);
     }
+	private void updateHistoricalBoard(GameData data){
+		this.updateBoard(data);
+		this.updateTimeLeft(data);
+		this.updateWhosTurn(data);
+		this.updateGameMode(data);
+		this.updateGameId(data);
+	}
 
 	private void updateBoard(GameData data) {
 		//normal mode for first 8 moves
@@ -202,14 +219,14 @@ public class GameWindow extends JFrame implements GameObserver {
 	}
 
 	private void updateGameMode(GameData data) {
-		if(data.result.equals(Result.NONE)){
+//		if(data.result.equals(Result.NONE)){
 			if(data.gameSequence.size() < 9){
 				gameModeLabel.setText("Normal Mode");
 			}
 			else{
 				gameModeLabel.setText("Achi Mode");
 			}
-		}
+//		}
 	}
 
 	private void updateGameId(GameData data) {
@@ -237,19 +254,19 @@ public class GameWindow extends JFrame implements GameObserver {
 					myGameController.start("", codeText.getText());
 					//myGameController.start();
 				}
-            Thread gameThread = new Thread(myGameController);
-            gameThread.start();
+				Thread gameThread = new Thread(myGameController);
+				gameThread.start();
 			}
-			if(buttonPressed.equals(prevHistoryBtn)){
+			else if(buttonPressed.equals(prevHistoryBtn)){
 				if(gameHistoryDepth > 1){
 					gameHistoryDepth--;
-					update(gameHistory.get(gameHistoryDepth));
+					updateHistoricalBoard(gameHistory.get(gameHistoryDepth));
 				}
 			}
-			if(buttonPressed.equals(nextHistoryBtn)){
-				if(gameHistoryDepth < gameHistory.size()){
+			else if(buttonPressed.equals(nextHistoryBtn)){
+				if(gameHistoryDepth < gameHistory.size() -1){
 					gameHistoryDepth++;
-					update(gameHistory.get(gameHistoryDepth));
+					updateHistoricalBoard(gameHistory.get(gameHistoryDepth));
 				}
 			}
 		}
