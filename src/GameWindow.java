@@ -177,14 +177,21 @@ public class GameWindow extends JFrame implements GameObserver {
 		}else{
 			whosTurnLabel.setText("Waiting on Opponent...");
 		}
+		if(data.result == Result.LOSE){
+			whosTurnLabel.setText("You Lose");
+		}else if(data.result == Result.WIN){
+			whosTurnLabel.setText("You Win");
+		}
 	}
 
 	private void updateGameMode(GameData data) {
-		if(data.gameMode.equals(GameMode.ACHI)){
-			gameModeLabel.setText("Achi Mode");
-		}
-		else{
-			gameModeLabel.setText("Slide Mode");
+		if(data.result.equals(Result.NONE)){
+			if(data.gameSequence.size() < 8){
+				gameModeLabel.setText("Normal Mode");
+			}
+			else{
+				gameModeLabel.setText("Achi Mode");
+			}
 		}
 	}
 
