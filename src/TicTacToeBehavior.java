@@ -53,9 +53,9 @@ public class TicTacToeBehavior implements GameBehavior {
                 break;
             case 2:
                 if (detectCornerMove(enemyMoves.get(enemyMoves.size() - 1))) {
-                    
+
                 } else if (detectSideMove(enemyMoves.get(enemyMoves.size() - 1))) {
-                    
+
                 }
                 break;
             case 3:
@@ -71,10 +71,7 @@ public class TicTacToeBehavior implements GameBehavior {
             default:
                 break;
         }
+        return myNextMove;
     }
-    move
-    ++;
-    return myNextMove ;
-}
 
 }
