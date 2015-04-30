@@ -2,19 +2,29 @@
 import java.util.*;
 
 /**
- * 
+ *
  */
 public class Engine extends GameEngine {
 
     /**
-     * 
+     *
      */
+    ArrayList<Integer> enemyMoves;
+    ArrayList<Integer> movesLeft;
+    ArrayList<Integer> myMoves;
+
     public Engine() {
-        gb = new GameEngineBehaviorRandom();
+        gb = new RandomBehavior();
+        enemyMoves = new ArrayList<>();
+        movesLeft = new ArrayList<>();
+        myMoves = new ArrayList<>();
+        for (int i = 0; i < 9; i++) {
+            movesLeft.add(i);
+        }
     }
 
     /**
-     * @param game 
+     * @param game
      * @return
      */
     @Override
