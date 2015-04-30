@@ -66,7 +66,8 @@ public class GameWindow extends JFrame implements GameObserver {
 		}
 
 		gameModeLabel = new JLabel("Movement Mode");
-		timeLeftLabel = new JLabel("timeLeft");
+//		timeLeftLabel = new JLabel("timeLeft");
+		timeLeftLabel = new JLabel();
 		whosTurnLabel = new JLabel("Waiting on opponent...");
 		JPanel statsLabelContainer = new JPanel(new GridLayout(4, 1)); 
 
@@ -134,7 +135,7 @@ public class GameWindow extends JFrame implements GameObserver {
     }
 	private void updateHistoricalBoard(GameData data){
 		this.updateBoard(data);
-		this.updateTimeLeft(data);
+//		this.updateTimeLeft(data);
 		this.updateWhosTurn(data);
 		this.updateGameMode(data);
 		this.updateGameId(data);
@@ -231,6 +232,11 @@ public class GameWindow extends JFrame implements GameObserver {
 
 	private void updateGameId(GameData data) {
 		codeText.setText(data.gameId);
+		if(data.player.equals(Player.PLAYER1)){
+			timeLeftLabel.setText("Player 1");
+		}else{
+			timeLeftLabel.setText("Player 2");
+		}
 	}
 
 	class ButtonListener implements ActionListener {
@@ -243,9 +249,10 @@ public class GameWindow extends JFrame implements GameObserver {
 			c1.show(cards, PLAYGAMECARD);
 			//move startGamePanel to second card
 			statsPanel.add(startGamePanel, "South");
+			startGameBtn.setVisible(false);
 			//make start game button default button for enter
-			JRootPane rootPane = SwingUtilities.getRootPane(startGameBtn);
-			rootPane.setDefaultButton(startGameBtn);
+			//JRootPane rootPane = SwingUtilities.getRootPane(startGameBtn);
+			//rootPane.setDefaultButton(startGameBtn);
 			if(buttonPressed.equals(startGameBtn)){
 				if(codeText.getText().equals("")){
 					myGameController.start("");
