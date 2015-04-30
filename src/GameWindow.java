@@ -186,7 +186,7 @@ public class GameWindow extends JFrame implements GameObserver {
 
 	private void updateGameMode(GameData data) {
 		if(data.result.equals(Result.NONE)){
-			if(data.gameSequence.size() < 8){
+			if(data.gameSequence.size() < 9){
 				gameModeLabel.setText("Normal Mode");
 			}
 			else{
