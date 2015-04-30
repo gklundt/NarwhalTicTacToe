@@ -19,6 +19,8 @@ public class GameWindow extends JFrame implements GameObserver {
     private final AbstractGameController myGameController;
 	private final ButtonListener btnObserver;
 	public final JButton startGameBtn;
+	public final JButton nextHistoryBtn;
+	public final JButton prevHistoryBtn;
 	private final JPanel cards;
 	private final static String STARTGAMECARD = "Card for starting Game";
 	private final static String PLAYGAMECARD = "Card for playing Game";
@@ -29,6 +31,8 @@ public class GameWindow extends JFrame implements GameObserver {
 	private final JLabel gameModeLabel;
 	private final ArrayList<JButton> buttonList; 
 	private final JPanel statsPanel;
+	private final ArrayList<GameData>gameHistory;
+	private int gameHistoryDepth;
 
     public GameWindow(AbstractGameController gc) {
 		//observe any changes in myGameController
@@ -36,6 +40,8 @@ public class GameWindow extends JFrame implements GameObserver {
 		gc.subscribe(this);
 
 		buttonList = new ArrayList<>();
+		gameHistory = new ArrayList<>();
+		gameHistoryDepth =-1;
 	
 		Container rootWindow = getContentPane();
 		//Use Card Layout
@@ -48,6 +54,7 @@ public class GameWindow extends JFrame implements GameObserver {
 		statsPanel = new JPanel(new BorderLayout());
 		JPanel gameModePanel = new JPanel();
 		startGamePanel = new JPanel(new GridLayout(3, 1));
+		JPanel gameHistoryButtonsPanel = new JPanel(new GridLayout(1,2));
 
 		Font buttonFont = new Font("Courier New", Font.BOLD, 180);
 		
@@ -61,18 +68,26 @@ public class GameWindow extends JFrame implements GameObserver {
 		gameModeLabel = new JLabel("Movement Mode");
 		timeLeftLabel = new JLabel("timeLeft");
 		whosTurnLabel = new JLabel("Waiting on opponent...");
-		JPanel statsLabelContainer = new JPanel(new GridLayout(2, 1)); 
+		JPanel statsLabelContainer = new JPanel(new GridLayout(4, 1)); 
 
 		startGameBtn = new JButton("Start Game");
 		btnObserver = new ButtonListener();
 		startGameBtn.addActionListener(btnObserver);
 		codeText = new JTextField("");
+		prevHistoryBtn = new JButton("<");
+		prevHistoryBtn.addActionListener(btnObserver);
+		nextHistoryBtn = new JButton(">");
+		nextHistoryBtn.addActionListener(btnObserver);
 
 		//add components to containers
+		gameHistoryButtonsPanel.add(prevHistoryBtn);
+		gameHistoryButtonsPanel.add(nextHistoryBtn);
 		startPageCard.add(startGamePanel);
 		playGameCard.add(buttonPanel, "Center");
 		statsLabelContainer.add(timeLeftLabel);
 		statsLabelContainer.add(whosTurnLabel);
+		statsLabelContainer.add(new JLabel("Game History"));
+		statsLabelContainer.add(gameHistoryButtonsPanel);
 		statsPanel.add(statsLabelContainer, "North");
 		startGamePanel.add(startGameBtn/*2*/);
 		startGamePanel.add(new JLabel("Game ID"));
@@ -99,6 +114,8 @@ public class GameWindow extends JFrame implements GameObserver {
 	
 	@Override
     public void update(GameData data ) {
+		gameHistoryDepth++;
+		gameHistory.add(data);
 		this.updateBoard(data);
 		this.updateTimeLeft(data);
 		//this.updateWhosTurn(data);
@@ -206,9 +223,21 @@ public class GameWindow extends JFrame implements GameObserver {
 					myGameController.start("", codeText.getText());
 					//myGameController.start();
 				}
-			}
             Thread gameThread = new Thread(myGameController);
             gameThread.start();
+			}
+			if(buttonPressed.equals(prevHistoryBtn)){
+				if(gameHistoryDepth > 1){
+					gameHistoryDepth--;
+					update(gameHistory.get(gameHistoryDepth));
+				}
+			}
+			if(buttonPressed.equals(nextHistoryBtn)){
+				if(gameHistoryDepth < gameHistory.size()){
+					gameHistoryDepth++;
+					update(gameHistory.get(gameHistoryDepth));
+				}
+			}
 		}
 	}
 }
