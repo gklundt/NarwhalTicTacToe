@@ -15,6 +15,7 @@ public class Engine extends GameEngine {
     private boolean iAmFirstPlayer;
 
     public Engine() {
+        //gb = new RandomBehavior();
         gb = new TicTacToeBehavior();
         enemyMoves = new ArrayList<>();
         movesLeft = new ArrayList<>();
@@ -38,7 +39,10 @@ public class Engine extends GameEngine {
         movesLeft = new ArrayList<>();
         myMoves = new ArrayList<>();
 
-        /*if (game.gameSequence.isEmpty()) {
+        for(int i = 0; i < 9; i++) {
+            movesLeft.add(Integer.valueOf(i));
+        }
+        if (game.gameSequence.isEmpty()) {
             iAmFirstPlayer = true;
         }
 
@@ -47,7 +51,7 @@ public class Engine extends GameEngine {
             game.gameSequence.removeFirst();
         }
 
-        for(int i = 0; i < gameArray.size(); i++) {
+        for (int i = 0; i < gameArray.size(); i++) {
             game.gameSequence.add(gameArray.get(i));
         }
         if (iAmFirstPlayer && gameArray.size() < 9) {
@@ -109,26 +113,25 @@ public class Engine extends GameEngine {
                 }
             }
         }
+        
         if (game.gameSequence.isEmpty()) {
             //This block indicates first move of game.
-            myNextMove = gb.getMoveCommon(enemyMoves, movesLeft, myMoves);
+            //myNextMove = gb.getMoveCommon(enemyMoves, movesLeft, myMoves);
         } else if (game.gameSequence.size() == 8) {
             //This block indicates first move of ACHI.
             gb = new AchiBehavior();
-            myNextMove = gb.getMoveCommon(enemyMoves, movesLeft, myMoves);
+            //myNextMove = gb.getMoveCommon(enemyMoves, movesLeft, myMoves);
         } else if (game.gameSequence.size() > 8) {
             //This block indicates full ACHI mode.
             gb = new AchiBehavior();
-            myNextMove = gb.getMoveCommon(enemyMoves, movesLeft, myMoves);
+            //myNextMove = gb.getMoveCommon(enemyMoves, movesLeft, myMoves);
         } else {
             //This block indicates normal mode.
-            myNextMove = gb.getMoveCommon(enemyMoves, movesLeft, myMoves);
-        }*/
-        
-        
+            //myNextMove = gb.getMoveCommon(enemyMoves, movesLeft, myMoves);
+        }
+
         //Old Algorithm
-        
-         if (game.gameSequence.isEmpty()) {
+        /*if (game.gameSequence.isEmpty()) {
          //This block indicates first move of game.
          myNextMove = gb.getMoveCommon(enemyMoves, movesLeft, myMoves);
          myMoves.add(Integer.valueOf(myNextMove));
@@ -160,26 +163,27 @@ public class Engine extends GameEngine {
          myNextMove = gb.getMoveCommon(enemyMoves, movesLeft, myMoves);
          myMoves.add(Integer.valueOf(myNextMove));
          movesLeft.remove(Integer.valueOf(myNextMove));
-         }
-
+         }*/
         //Debugging code comment block
         /*System.out.print("Enemy Moves: ");
-         enemyMoves.stream().forEach((enemyMove) -> {
-         System.out.print(enemyMove + " ");
-         });
-         System.out.println();
-         System.out.print("My Moves: ");
-         for (Integer myMove : myMoves) {
-         System.out.print(myMove + " ");
-         }
-         System.out.println();
-         System.out.print("Moves Left: ");
-         for (Integer myMove : movesLeft) {
-         System.out.print(myMove + " ");
-         }
-         System.out.println();
-         System.out.println("This Move: " + myMoves.get(myMoves.size() - 1));*/
-        return myNextMove;
+        if (enemyMoves.isEmpty()) {
+            enemyMoves.stream().forEach((enemyMove) -> {
+                System.out.print(enemyMove + " ");
+            });
+        }
+        System.out.println();
+        System.out.print("My Moves: ");
+        for (Integer myMove : myMoves) {
+            System.out.print(myMove + " ");
+        }
+        System.out.println();
+        System.out.print("Moves Left: ");
+        for (Integer myMove : movesLeft) {
+            System.out.print(myMove + " ");
+        }
+        System.out.println();
+        System.out.println("This Move: " + myMoves.get(myMoves.size() - 1));*/
+        return (int)gb.getMoveCommon(enemyMoves, movesLeft, myMoves);
     }
 
 }

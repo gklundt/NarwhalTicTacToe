@@ -40,7 +40,7 @@ public class TicTacToeBehavior implements GameBehavior {
         return false;
     }
 
-    private int detectBlock(ArrayList<Integer> enemyMoves) {
+    private int detectBlock(ArrayList<Integer> enemyMoves, ArrayList<Integer> movesLeft) {
         int positions;
         int blockThisPosition = 0;
         for (int i = 0; i < 8; i++) {
@@ -49,7 +49,11 @@ public class TicTacToeBehavior implements GameBehavior {
                 if (enemyMoves.contains(Integer.valueOf(winningPositions[i][j]))) {
                     positions++;
                 } else {
-                    blockThisPosition = winningPositions[i][j];
+                    if (movesLeft.contains(Integer.valueOf(winningPositions[i][j]))) {
+                        blockThisPosition = winningPositions[i][j];
+                    } else {
+                        positions = 0;
+                    }
                 }
             }
             if (positions >= 2) {
@@ -59,7 +63,7 @@ public class TicTacToeBehavior implements GameBehavior {
         return -1;
     }
 
-    private int detectWin(ArrayList<Integer> myMoves) {
+    private int detectWin(ArrayList<Integer> myMoves, ArrayList<Integer> movesLeft) {
         int positions;
         int winThisPosition = 0;
         for (int i = 0; i < 8; i++) {
@@ -68,7 +72,11 @@ public class TicTacToeBehavior implements GameBehavior {
                 if (myMoves.contains(Integer.valueOf(winningPositions[i][j]))) {
                     positions++;
                 } else {
-                    winThisPosition = winningPositions[i][j];
+                    if (movesLeft.contains(Integer.valueOf(winningPositions[i][j]))) {
+                        winThisPosition = winningPositions[i][j];
+                    } else {
+                        positions = 0;
+                    }
                 }
             }
             if (positions >= 2) {
@@ -83,7 +91,8 @@ public class TicTacToeBehavior implements GameBehavior {
      */
     @Override
     public int getMoveCommon(ArrayList<Integer> enemyMoves, ArrayList<Integer> movesLeft, ArrayList<Integer> myMoves) {
-        int myNextMove = 0;
+        int myNextMove = movesLeft.get(0);
+        System.out.println("m: " + movesLeft.size());
         switch (9 - movesLeft.size()) {
             case 0:
                 //Player 1 move 1
@@ -92,7 +101,7 @@ public class TicTacToeBehavior implements GameBehavior {
             case 1:
                 //Player 2 move 1
                 if (enemyMoves.contains(Integer.valueOf(4))) {
-                    myNextMove = 0;
+                    myNextMove = 1;
                 } else {
                     myNextMove = 4;
                 }
@@ -116,14 +125,46 @@ public class TicTacToeBehavior implements GameBehavior {
                 }
                 break;
             case 3:
+                if (detectBlock(enemyMoves, movesLeft) > -1) {
+                    myNextMove = detectBlock(enemyMoves, movesLeft);
+                } else if (detectWin(myMoves, movesLeft) > - 1) {
+                    myNextMove = detectWin(myMoves, movesLeft);
+                } else {
+                    myNextMove = movesLeft.get(movesLeft.size() - 1);
+                }
+                break;
             case 4:
+                if (detectBlock(enemyMoves, movesLeft) > -1) {
+                    myNextMove = detectBlock(enemyMoves, movesLeft);
+                } else if (detectWin(myMoves, movesLeft) > -1) {
+                    myNextMove = detectWin(myMoves, movesLeft);
+                } else {
+                    myNextMove = movesLeft.get(movesLeft.size() - 1);
+                }
+                break;
             case 5:
+                if (detectBlock(enemyMoves, movesLeft) > -1) {
+                    myNextMove = detectBlock(enemyMoves, movesLeft);
+                } else if (detectWin(myMoves, movesLeft) > -1) {
+                    myNextMove = detectWin(myMoves, movesLeft);
+                } else {
+                    myNextMove = movesLeft.get(movesLeft.size() - 1);
+                }
+                break;
             case 6:
+                if (detectBlock(enemyMoves, movesLeft) > -1) {
+                    myNextMove = detectBlock(enemyMoves, movesLeft);
+                } else if (detectWin(myMoves, movesLeft) > -1) {
+                    myNextMove = detectWin(myMoves, movesLeft);
+                } else {
+                    myNextMove = movesLeft.get(movesLeft.size() - 1);
+                }
+                break;
             case 7:
-                if (detectBlock(enemyMoves) > -1) {
-                    myNextMove = detectBlock(enemyMoves);
-                } else if (detectWin(enemyMoves) > - 1) {
-                    myNextMove = detectWin(myMoves);
+                if (detectBlock(enemyMoves, movesLeft) > -1) {
+                    myNextMove = detectBlock(enemyMoves, movesLeft);
+                } else if (detectWin(myMoves, movesLeft) > -1) {
+                    myNextMove = detectWin(myMoves, movesLeft);
                 } else {
                     myNextMove = movesLeft.get(movesLeft.size() - 1);
                 }
