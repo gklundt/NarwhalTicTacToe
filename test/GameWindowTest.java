@@ -103,7 +103,7 @@ public class GameWindowTest {
 
 	@Test
 	public void testUpdatePlayerPass(){
-		//should pass
+		//all values should remain the same
 		data1.player = Player.PLAYER1;
 		data2.player = Player.PLAYER1;
 		data1.gameId = "3";
