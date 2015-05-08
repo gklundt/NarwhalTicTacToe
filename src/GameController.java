@@ -8,7 +8,16 @@ public class GameController extends AbstractGameController implements Runnable {
 
 	private GameData gd;
 	
-    /**
+	//Getter and Setter for test cases
+    public GameData getGd() {
+		return gd;
+	}
+    
+    public void setGd(GameData gd){
+    	this.gd = gd;
+    }
+
+	/**
      * 
      */
     public GameController(GameEngine ge, AbstractProtocolAdapter pa) {
