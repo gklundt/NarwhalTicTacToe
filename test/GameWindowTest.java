@@ -6,6 +6,7 @@
 
 import java.util.Deque;
 import java.util.NoSuchElementException;
+import static org.hamcrest.CoreMatchers.*;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -59,42 +60,45 @@ public class GameWindowTest {
 	@Test(expected = NullPointerException.class)
     public void testUpdateNullUpdate() {
         GameData data = null;
-        GameWindow instance = null;
         instance.update(data);
     }
+	@Test(expected = NullPointerException.class)
+    public void testUpdateNullUpdate2() {
+		data1.result = null;
+        instance.update(data1);
+    }
+
 	@Test
-    public void testGameSequence1() {
+    public void testGameSequenceAdd() {
 		data1.player = Player.PLAYER1;
         data1.gameSequence.add(11);
         instance.update(data1);
 		assertEquals((long)data1.gameSequence.getFirst(), (long)11);
     }
 	@Test(expected = NoSuchElementException.class)
-    public void testGameSequence2() {
+    public void testRemoveFromEmptyList() {
 		data1.player = Player.PLAYER1;
         data1.gameSequence.removeFirst();
         instance.update(data1);
 		assertEquals(data1.gameSequence.size(), 0);
     }
 
-	@Ignore
+	@Test
 	public void testUpdateDeep(){
 		data1.player = Player.PLAYER1;
 		data2.player = Player.PLAYER1;
         instance.update(data1);
-		//different objects should cause to fail
-        assertEquals(data1, data2);
-		fail("Warning, Should have failed but did not");
+		//should be different objects
+        assertThat(data1, is(not(data2)));
 	}
     
-	@Ignore
-	public void testUpdatePlayerFail(){
-		//should fail
+	@Test
+	public void testUpdatePlayerDifferent(){
 		data1.player = Player.PLAYER1;
 		data2.player = Player.PLAYER2;
         instance.update(data1);
-        assertEquals(data1.player, data2.player);
-		fail("Warning, Should have failed, but did not");
+		//Player 1 and Player 2 should be different 
+        assertThat(data1.player, is(not(data2.player)));
 	}
 
 	@Test
@@ -120,5 +124,5 @@ public class GameWindowTest {
 		assertEquals(data1.result, data2.result);
 		assertEquals(data1.timeLeft, data2.timeLeft);
 	}
-    
+	 
 }
