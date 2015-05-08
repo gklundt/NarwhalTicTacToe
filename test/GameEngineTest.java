@@ -5,9 +5,7 @@
  */
 
 import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -18,14 +16,6 @@ import static org.junit.Assert.*;
 public class GameEngineTest {
     
     public GameEngineTest() {
-    }
-    
-    @BeforeClass
-    public static void setUpClass() {
-    }
-    
-    @AfterClass
-    public static void tearDownClass() {
     }
     
     @Before
@@ -41,14 +31,29 @@ public class GameEngineTest {
      */
     @Test
     public void testGetMove() {
-        System.out.println("getMove");
-        GameData game = null;
-        GameEngine instance = new GameEngineImpl();
         int expResult = 0;
-        int result = instance.getMove(game);
+        int result = 0;
+        System.out.println("getMove");
+        GameData game = new GameData();
+        game.player = game.player.PLAYER1;
+        Engine instance = new Engine();
+        
+        expResult = 4;
+        result = instance.getMove(game);
+        game.gameSequence.add(result);
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+   
+        expResult = 0;
+        game.gameSequence.add(expResult);
+        result = 1;
+        game.gameSequence.add(result);
+        assertNotEquals(expResult, result);
+        
+        expResult = 3;
+        game.gameSequence.add(expResult);
+        result = instance.getMove(game);
+        game.gameSequence.add(result);
+        assertNotEquals(expResult, result);
     }
 
     public class GameEngineImpl extends GameEngine {
