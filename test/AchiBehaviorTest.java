@@ -38,24 +38,24 @@ public class AchiBehaviorTest {
         myMoves = new ArrayList<>();
 
         enemyMoves.add(0);
-        enemyMoves.add(1);
-        enemyMoves.add(6);
-        enemyMoves.add(7);
+        enemyMoves.add(2);
+        enemyMoves.add(3);
+        enemyMoves.add(4);
         
-        myMoves.add(2);
-        myMoves.add(3);
-        myMoves.add(4);
+        myMoves.add(1);
+        myMoves.add(5);
+        myMoves.add(6);
         myMoves.add(8);
         
-        movesLeft.add(5);
+        movesLeft.add(7);
         
         
         System.out.println("getMoveCommon");
         GameData game = null;
-        TicTacToeBehavior instance = new TicTacToeBehavior();
-        int expResult = 5;
+        AchiBehavior instance = new AchiBehavior();
+        int expResult = 7;
         int result = instance.getMoveCommon(enemyMoves, movesLeft, myMoves);
-        assertEquals(expResult, result);
+        assertNotEquals(expResult, result);
     }
     
 }

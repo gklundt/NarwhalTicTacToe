@@ -44,7 +44,7 @@ public class GameEngineBehaviorRandomTest {
         
         System.out.println("getMoveCommon");
         GameData game = null;
-        TicTacToeBehavior instance = new TicTacToeBehavior();
+        RandomBehavior instance = new RandomBehavior();
         int expResult = 8;
         int result = instance.getMoveCommon(enemyMoves, movesLeft, myMoves);
         assertNotEquals(expResult, result);
