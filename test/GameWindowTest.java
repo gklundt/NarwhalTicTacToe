@@ -5,12 +5,14 @@
  */
 
 import java.util.Deque;
+import java.util.NoSuchElementException;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.Ignore;
 
 public class GameWindowTest {
     
@@ -61,6 +63,21 @@ public class GameWindowTest {
         instance.update(data);
     }
 	@Test
+    public void testGameSequence1() {
+		data1.player = Player.PLAYER1;
+        data1.gameSequence.add(11);
+        instance.update(data1);
+		assertEquals((long)data1.gameSequence.getFirst(), (long)11);
+    }
+	@Test(expected = NoSuchElementException.class)
+    public void testGameSequence2() {
+		data1.player = Player.PLAYER1;
+        data1.gameSequence.removeFirst();
+        instance.update(data1);
+		assertEquals(data1.gameSequence.size(), 0);
+    }
+
+	@Ignore
 	public void testUpdateDeep(){
 		data1.player = Player.PLAYER1;
 		data2.player = Player.PLAYER1;
@@ -70,7 +87,7 @@ public class GameWindowTest {
 		fail("Warning, Should have failed but did not");
 	}
     
-	@Test
+	@Ignore
 	public void testUpdatePlayerFail(){
 		//should fail
 		data1.player = Player.PLAYER1;
