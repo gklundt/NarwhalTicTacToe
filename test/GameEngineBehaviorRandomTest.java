@@ -4,10 +4,9 @@
  * and open the template in the editor.
  */
 
+import java.util.ArrayList;
 import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -18,14 +17,6 @@ import static org.junit.Assert.*;
 public class GameEngineBehaviorRandomTest {
     
     public GameEngineBehaviorRandomTest() {
-    }
-    
-    @BeforeClass
-    public static void setUpClass() {
-    }
-    
-    @AfterClass
-    public static void tearDownClass() {
     }
     
     @Before
@@ -41,14 +32,22 @@ public class GameEngineBehaviorRandomTest {
      */
     @Test
     public void testGetMoveCommon() {
+        ArrayList<Integer> enemyMoves, movesLeft, myMoves;
+        enemyMoves = new ArrayList<>();
+        movesLeft = new ArrayList<>();
+        myMoves = new ArrayList<>();
+
+        enemyMoves.add(8);
+        for (int i = 0; i < 8; i++) {
+            movesLeft.add(i);
+        }
+        
         System.out.println("getMoveCommon");
         GameData game = null;
-        GameEngineBehaviorRandom instance = new GameEngineBehaviorRandom();
-        int expResult = 0;
-        int result = instance.getMoveCommon(game);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        TicTacToeBehavior instance = new TicTacToeBehavior();
+        int expResult = 8;
+        int result = instance.getMoveCommon(enemyMoves, movesLeft, myMoves);
+        assertNotEquals(expResult, result);
     }
     
 }
