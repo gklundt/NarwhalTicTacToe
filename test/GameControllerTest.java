@@ -4,36 +4,59 @@
  * and open the template in the editor.
  */
 
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
 import static org.junit.Assert.*;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 
 /**
  *
- * @author gordon
+ * @author Cody M.
  */
-public class GameControllerTest {
+
+class Foo extends GameEngine implements GameObserver{
+
+	@Override
+	public void update(GameData data) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public int getMove(GameData game) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+	
+}
+
+
+public class GameControllerTest{
+	
+	GameObserver go;
+	GameController gc;
+	GameEngine ge;
+	ProtocolAdapter pa;
     
     public GameControllerTest() {
     }
     
-    @BeforeClass
-    public static void setUpClass() {
-    }
-    
-    @AfterClass
-    public static void tearDownClass() {
-    }
     
     @Before
     public void setUp() {
+    	go = new Foo();
+    	ge = new Foo();
+    	pa = new ProtocolAdapter();
+    	gc = new GameController(ge, pa);
     }
     
     @After
     public void tearDown() {
+    	go = null;
+    	gc = null;
+    	pa = null;
+    	pa = null;
     }
 
     /**
@@ -42,11 +65,11 @@ public class GameControllerTest {
     @Test
     public void testSubscribe() {
         System.out.println("subscribe");
-        GameObserver obs = null;
-        GameController instance = null;
+        GameObserver obs = go;
+        GameController instance = gc;
         instance.subscribe(obs);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        
+        assertTrue(gc.gameObservers.contains(obs));
     }
 
     /**
@@ -56,10 +79,9 @@ public class GameControllerTest {
     public void testStart_String() {
         System.out.println("start");
         String uri = "";
-        GameController instance = null;
+        GameController instance = gc;
         instance.start(uri);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        assertTrue(gc.getGd().result == Result.NONE);
     }
 
     /**
@@ -70,10 +92,9 @@ public class GameControllerTest {
         System.out.println("start");
         String uri = "";
         String code = "";
-        GameController instance = null;
+        GameController instance = gc;
         instance.start(uri, code);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        assertTrue(gc.getGd().result == Result.NONE);
     }
 
     /**
@@ -82,10 +103,9 @@ public class GameControllerTest {
     @Test
     public void testNotifyObservers() {
         System.out.println("notifyObservers");
-        GameController instance = null;
+        GameController instance = gc;
         instance.notifyObservers();
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        assertTrue(true);
     }
 
     /**
@@ -94,10 +114,11 @@ public class GameControllerTest {
     @Test
     public void testRun() {
         System.out.println("run");
-        GameController instance = null;
+        gc.setGd(new GameData());
+        gc.getGd().result = Result.WIN;
+        GameController instance = gc;
         instance.run();
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        assertNull(gc.getGd());
     }
     
 }
